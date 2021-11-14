@@ -4,7 +4,7 @@ set(CHESS_SOURCES
     Game.cpp
     King.cpp
     Knight.cpp
-    mainLoop.cpp
+    MainLoop.cpp
     Pawn.cpp
     Piece.cpp
     Queen.cpp
