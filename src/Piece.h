@@ -14,11 +14,11 @@ class Piece
 {
 public:
 
-	enum Team { BLACK, WHITE, NONE };
+	enum Team { BLACK, WHITE };
 
-	enum PieceType { PAWN, ROOK, KNIGHT, BISHOP, KING, QUEEN, EMPTY };
+	enum PieceType { PAWN, ROOK, KNIGHT, BISHOP, KING, QUEEN };
 
-	enum MoveType { NORMAL, CASTLE, ENPASSANT, NEWPIECE, INIT };
+	enum MoveType { NORMAL, CASTLE, ENPASSANT, NEWPIECE };
 
 	struct SPosition
 	{
