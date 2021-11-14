@@ -1,12 +1,14 @@
 #pragma once
+
 #include "Piece.h"
 #include "King.h"
+
 class Bishop :
     public Piece
 {
 public:
     //Constructor
-    Bishop(Team team, std::pair<int, int> pos, SDL_Handler* handler);
+    Bishop(Team team, const SPosition& pos, SDL_Handler& handler);
 
     // used to debug some stuff
     void sayMyName();

@@ -1,6 +1,5 @@
 #pragma once
-#include "Piece.h"
-#include "SDL_Handler.h"
+
 #include "Piece.h"
 #include "Pawn.h"
 #include "Rook.h"
@@ -9,13 +8,13 @@
 #include "King.h"
 #include "Queen.h"
 
+#include "SDL_Handler.h"
+
 class Game
 {
 public:
-	// Constructor
-	Game(SDL_Handler* handler);
+	Game(SDL_Handler& handler);
 
-    // Destructor
     ~Game();
 
 	// returns a the Piece in field (row, col)
@@ -65,7 +64,7 @@ private:
     Piece::Team m_turn;
 
     // handler
-    SDL_Handler* m_handler;
+    SDL_Handler& m_handler;
 
     // if true, disable en Passant! if false, dont
     bool m_checkEnPassant;

@@ -1,9 +1,11 @@
 #pragma once
 
+#include "SDL_Handler.h"
+
+#include <SDL.h>
+
 #include <utility>
 #include <vector>
-#include "SDL_Handler.h"
-#include <SDL.h>
 #include <tuple>
 
 class King;
@@ -18,6 +20,11 @@ public:
 
 	enum MoveType { NORMAL, CASTLE, ENPASSANT, NEWPIECE, INIT };
 
+	struct SPosition
+	{
+		int x, y;
+	};
+
 	// returns list of possible Moves
 	std::vector<std::tuple <int, int, Piece::MoveType>> getPossibleMoves() { return m_possibleMoves; };
 
@@ -25,13 +32,13 @@ public:
 	Team getTeam() { return m_team; };
 
 	// sets new position
-	void setPosition(std::pair<int, int> newPos) { m_pos = newPos; };
+	void setPosition(SPosition newPos) { m_pos = newPos; };
 
 	// return position of piece
-	std::pair<int, int> getPos() { return m_pos; };
+	const SPosition& getPos() { return m_pos; };
 
 	// Constructor
-	Piece(Team team, std::pair<int,int> pos, SDL_Handler* handler, PieceType type);
+	Piece(Team team, const SPosition& pos, SDL_Handler& handler, PieceType type);
 
 	// Copy-Constructor
 	Piece(const Piece& piece);
@@ -60,7 +67,7 @@ protected:
 	SDL_Texture* m_texture;
 
 	// SDL Handler
-	SDL_Handler* m_handler;
+	SDL_Handler& m_handler;
 
 	// Team this piece plays for
 	Team m_team;
@@ -72,7 +79,8 @@ protected:
 	std::vector<std::tuple <int, int, Piece::MoveType>> m_possibleMoves;
 	
 	// Position of the piece
-	std::pair<int, int> m_pos;
+	//std::pair<int, int> m_pos;
+	SPosition m_pos;
 
 	// pushes the move, if its allowed.
 	// simulates the move, and checks wheter the own king is still checked

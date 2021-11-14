@@ -1,7 +1,8 @@
 #include "Queen.h"
+
 #include <iostream>
 
-Queen::Queen(Team team, std::pair<int, int> pos, SDL_Handler* handler)
+Queen::Queen(Team team, const SPosition& pos, SDL_Handler& handler)
 	:Piece(team, pos, handler, QUEEN)
 {
 	std::string filename;
@@ -13,8 +14,7 @@ Queen::Queen(Team team, std::pair<int, int> pos, SDL_Handler* handler)
 	{
 		filename = "../res/Chess_qlt60.png";
 	}
-	m_handler = handler;
-	m_texture = handler->loadImage(filename);
+	m_texture = handler.loadImage(filename);
 	render();
 }
 
@@ -42,10 +42,10 @@ void Queen::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 		{
 			dx_copy = dx;
 			dy_copy = dy;
-			while (field[m_pos.first + dx_copy][m_pos.second + dy_copy] == nullptr)
+			while (field[m_pos.x + dx_copy][m_pos.y + dy_copy] == nullptr)
 			{
 				moves = pushMove(moves,
-					std::tuple <int, int, Piece::MoveType>(m_pos.first + dx_copy, m_pos.second + dy_copy, Piece::NORMAL),
+					std::tuple <int, int, Piece::MoveType>(m_pos.x + dx_copy, m_pos.y + dy_copy, Piece::NORMAL),
 					getOwnKing(field),
 					field,
 					checkCheck);
@@ -66,13 +66,13 @@ void Queen::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 					dy_copy += 1;
 				}
 			}
-			if (field[m_pos.first + dx_copy][m_pos.second + dy_copy] != nullptr
-				&& (m_pos.first + dx_copy >= 0 && m_pos.first + dx_copy <= 7 && m_pos.second + dy_copy >= 0 && m_pos.second + dy_copy <= 7))
+			if (field[m_pos.x + dx_copy][m_pos.y + dy_copy] != nullptr
+				&& (m_pos.x + dx_copy >= 0 && m_pos.x + dx_copy <= 7 && m_pos.y + dy_copy >= 0 && m_pos.y + dy_copy <= 7))
 			{
-				if (field[m_pos.first + dx_copy][m_pos.second + dy_copy]->getTeam() != m_team)
+				if (field[m_pos.x + dx_copy][m_pos.y + dy_copy]->getTeam() != m_team)
 				{
 					moves = pushMove(moves,
-						std::tuple <int, int, Piece::MoveType>(m_pos.first + dx_copy, m_pos.second + dy_copy, Piece::NORMAL),
+						std::tuple <int, int, Piece::MoveType>(m_pos.x + dx_copy, m_pos.y + dy_copy, Piece::NORMAL),
 						getOwnKing(field),
 						field,
 						checkCheck);

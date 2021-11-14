@@ -1,9 +1,18 @@
 #include "SDL_Handler.h"
-#include <stdio.h>
+
 #include <iostream>
+#include <stdio.h>
 
+SDL_Handler::SDL_Handler()
+{
+}
 
-SDL_Texture* SDL_Handler::loadImage(std::string filename)
+SDL_Handler::~SDL_Handler()
+{
+	cleanUp();
+}
+
+SDL_Texture* SDL_Handler::loadImage(const std::string& filename)
 {
 	SDL_Surface* loadedImage = NULL;
 
@@ -24,9 +33,9 @@ void SDL_Handler::renderBackground()
 	bool white = true;
 	SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
 
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 8; ++i)
 	{
-		for (int j = 0; j < 8; j++)
+		for (int j = 0; j < 8; ++j)
 		{
 			if (white)
 			{
@@ -72,35 +81,25 @@ void SDL_Handler::cleanUp()
 	SDL_Quit();
 }
 
-
-void SDL_Handler::DrawRectangle(SDL_Rect source, SDL_Rect dest, SDL_Texture* text)
+void SDL_Handler::drawRectangle(SDL_Rect source, SDL_Rect dest, SDL_Texture* texture)
 {
-	if (text != nullptr)
+	if (texture != nullptr)
 	{
-		SDL_RenderCopy(m_renderer, text, &source, &dest);
+		SDL_RenderCopy(m_renderer, texture, &source, &dest);
 		SDL_RenderPresent(m_renderer);
 
 		SDL_UpdateWindowSurface(m_window);
 	}
 	else
 	{
-		std::cout << "DrawRectangle: text was nullptr" << std::endl;
+		std::cout << "DrawRectangle: texture was nullptr" << std::endl;
 	}
 }
-
-
-
-SDL_Handler::~SDL_Handler()
-{
-}
-
 
 bool SDL_Handler::init()
 {
 	m_window = NULL;
 	m_screenSurface = NULL;
-
-	bool quit = false;
 
 	//Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -113,14 +112,15 @@ bool SDL_Handler::init()
 	{
 		//Create window
 		m_window = SDL_CreateWindow("Chess", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-		if (m_window == NULL)
+		if (m_window != NULL)
 		{
-			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+			m_renderer = SDL_CreateRenderer(m_window, -1, 0);
 		}
 		else
 		{
-			m_renderer = SDL_CreateRenderer(m_window, -1, 0);
+			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 		}
 	}
 	return true;
 }
+
