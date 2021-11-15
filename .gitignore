@@ -7,6 +7,10 @@ build/*
 cmake_install.cmake
 compile_commands.json
 CMakeCache.txt
+CMakeFiles/*
+src/CMakeFiles/*
+Makefile
+src/Makefile
 
 # User-specific files
 *.rsuser
