@@ -425,10 +425,10 @@ void Game::disableEnPassant()
 void Game::renderPossibleMoves(Piece* piece)
 {
     piece->calcPossibleMoves(m_field, true);
-    std::vector<std::tuple<int, int, Piece::MoveType>> possible = piece->getPossibleMoves();
+    std::vector<Piece::SPieceMovement> possible = piece->getPossibleMoves();
     SDL_Rect rectangle;
     for (const auto& value : possible) {
-        if ((std::get<0>(value) % 2 == 0 && std::get<1>(value) % 2 == 1) || (std::get<0>(value) % 2 == 1 && std::get<1>(value) % 2 == 0))
+        if ((value.x % 2 == 0 && value.y % 2 == 1) || (value.x % 2 == 1 && value.y % 2 == 0))
         {
             SDL_SetRenderDrawColor(m_handler.m_renderer, 0, 134, 139, 255);
         }
@@ -436,8 +436,8 @@ void Game::renderPossibleMoves(Piece* piece)
         {
             SDL_SetRenderDrawColor(m_handler.m_renderer, 164, 211, 238, 255);
         }
-        rectangle = { std::get<0>(value) * m_handler.SCREEN_WIDTH / 8,
-                      std::get<1>(value)* m_handler.SCREEN_HEIGHT / 8,
+        rectangle = { value.x * m_handler.SCREEN_WIDTH / 8,
+                      value.y * m_handler.SCREEN_HEIGHT / 8,
                       m_handler.SCREEN_WIDTH / 8,
                       m_handler.SCREEN_HEIGHT / 8 };
         SDL_RenderFillRect(m_handler.m_renderer, &rectangle);
@@ -457,9 +457,9 @@ void Game::renderPossibleMoves(Piece* piece)
 
 void Game::undoRenderPossibleMoves(Piece* piece)
 {
-    std::vector<std::tuple<int, int, Piece::MoveType>> possible = piece->getPossibleMoves();
+    std::vector<Piece::SPieceMovement> possible = piece->getPossibleMoves();
     for (const auto& value : possible) {
-        if ((std::get<0>(value) % 2 == 0 && std::get<1>(value) % 2 == 1) || (std::get<0>(value) % 2 == 1 && std::get<1>(value) % 2 == 0))
+        if ((value.x % 2 == 0 && value.y % 2 == 1) || (value.x % 2 == 1 && value.y % 2 == 0))
         {
             SDL_SetRenderDrawColor(m_handler.m_renderer, 155, 103, 60, 255);
         }
@@ -467,8 +467,8 @@ void Game::undoRenderPossibleMoves(Piece* piece)
         {
             SDL_SetRenderDrawColor(m_handler.m_renderer, 255, 255, 255, 255);
         }
-        SDL_Rect rectangle = { std::get<0>(value) * m_handler.SCREEN_WIDTH / 8,
-                                  std::get<1>(value) * m_handler.SCREEN_HEIGHT / 8,
+        SDL_Rect rectangle = { value.x * m_handler.SCREEN_WIDTH / 8,
+                                  value.y * m_handler.SCREEN_HEIGHT / 8,
                                   m_handler.SCREEN_WIDTH / 8,
                                   m_handler.SCREEN_HEIGHT / 8 };
         SDL_RenderFillRect(m_handler.m_renderer, &rectangle);
@@ -502,9 +502,9 @@ void Game::calcAllMoves()
 
 bool Game::isValidMove(int x, int y, Piece* piece)
 {
-    std::vector<std::tuple<int, int, Piece::MoveType>> list = piece->getPossibleMoves();
+    std::vector<Piece::SPieceMovement> list = piece->getPossibleMoves();
     for (const auto& value : list) {
-        if (std::get<0>(value) == x && std::get<1>(value) == y)
+        if (value.x == x && value.y == y)
         {
             return true;
         }

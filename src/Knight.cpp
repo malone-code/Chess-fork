@@ -32,7 +32,7 @@ void Knight::sayMyName()
 
 void Knight::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 {
-	std::vector<std::tuple<int, int, Piece::MoveType>> moves;
+	std::vector<Piece::SPieceMovement> moves;
 	
 	for (int dx = -2; dx <= 2 ; dx += 4)
 	{
@@ -43,7 +43,7 @@ void Knight::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 				if (field[m_pos.x + dx][m_pos.y + dy] == nullptr)
 				{
 					moves = pushMove(moves,
-									 std::tuple<int, int, Piece::MoveType>(m_pos.x + dx, m_pos.y + dy, Piece::NORMAL),
+									 {m_pos.x + dx, m_pos.y + dy, Piece::NORMAL},
 									 getOwnKing(field),
 									 field,
 									 checkCheck);
@@ -53,7 +53,7 @@ void Knight::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 					if (field[m_pos.x + dx][m_pos.y + dy]->getTeam() != m_team)
 					{
 						moves = pushMove(moves,
-										 std::tuple<int, int, Piece::MoveType>(m_pos.x + dx, m_pos.y + dy, Piece::NORMAL),
+										 {m_pos.x + dx, m_pos.y + dy, Piece::NORMAL},
 										 getOwnKing(field),
 										 field,
 										 checkCheck);
@@ -72,20 +72,20 @@ void Knight::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 				if (field[m_pos.x + dx][m_pos.y + dy] == nullptr)
 				{
 					moves = pushMove(moves,
-						std::tuple<int, int, Piece::MoveType>(m_pos.x + dx, m_pos.y + dy, Piece::NORMAL),
-						getOwnKing(field),
-						field,
-						checkCheck);
+							{m_pos.x + dx, m_pos.y + dy, Piece::NORMAL},
+							getOwnKing(field),
+							field,
+							checkCheck);
 				}
 				else if (field[m_pos.x + dx][m_pos.y + dy] != nullptr)
 				{
 					if (field[m_pos.x + dx][m_pos.y + dy]->getTeam() != m_team)
 					{
 						moves = pushMove(moves,
-							std::tuple<int, int, Piece::MoveType>(m_pos.x + dx, m_pos.y + dy, Piece::NORMAL),
-							getOwnKing(field),
-							field,
-							checkCheck);
+								{m_pos.x + dx, m_pos.y + dy, Piece::NORMAL},
+								getOwnKing(field),
+								field,
+								checkCheck);
 					}
 				}
 			}

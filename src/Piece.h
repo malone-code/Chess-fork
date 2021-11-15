@@ -20,6 +20,12 @@ public:
 
 	enum MoveType { NORMAL, CASTLE, ENPASSANT, NEWPIECE };
 
+	struct SPieceMovement
+	{
+		int x, y;
+		MoveType moveType;
+	};
+
 	struct SPosition
 	{
 		int x, y;
@@ -32,7 +38,8 @@ public:
 	~Piece();
 
 	// returns list of possible Moves
-	std::vector<std::tuple <int, int, Piece::MoveType>> getPossibleMoves() { return m_possibleMoves; }
+	//std::vector<std::tuple <int, int, Piece::MoveType>> getPossibleMoves() { return m_possibleMoves; }
+	std::vector<SPieceMovement> getPossibleMoves() { return m_possibleMoves; }
 
 	// return whether BLACK or WHITE
 	Team getTeam() { return m_team; }
@@ -77,7 +84,7 @@ protected:
 	bool m_hasMoved;
 
 	// List of possible Moves this piece can do <row, col>
-	std::vector<std::tuple <int, int, Piece::MoveType>> m_possibleMoves;
+	std::vector<SPieceMovement> m_possibleMoves;
 	
 	// Position of the piece
 	//std::pair<int, int> m_pos;
@@ -89,11 +96,13 @@ protected:
 	// if checkCheck is true the king simulation will determine whether the move is allowed or not
 	// if checkCheck is false, we will just push the move. checkCheck is only false in King's setCheck function,
 	// because otherwise it will produce stack overflow (pushMove calls setCheck, setCheck calls pushMove and so on)
-	std::vector<std::tuple <int, int, Piece::MoveType>> pushMove(std::vector<std::tuple <int, int, Piece::MoveType>> moveList,
-																 std::tuple <int, int, Piece::MoveType> move,
-																 King* king,
-																 Piece* field[8][8],
-																 bool checkCheck);
+	
+	std::vector<SPieceMovement> pushMove(std::vector<SPieceMovement> moveList, SPieceMovement move, King* king, Piece* field[8][8], bool checkCheck);
+//	std::vector<std::tuple <int, int, Piece::MoveType>> pushMove(std::vector<std::tuple <int, int, Piece::MoveType>> moveList,
+//																 std::tuple <int, int, Piece::MoveType> move,
+//																 King* king,
+//																 Piece* field[8][8],
+//																 bool checkCheck);
 
 	// returns king of own team from field
 	King* getOwnKing(Piece* field[8][8]);

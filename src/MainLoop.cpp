@@ -58,12 +58,12 @@ void MainLoop::run()
 					&& (clickedOn->getTeam() == game.getTurn())
 					&& (game.isValidMove(xEnd, yEnd, clickedOn)))
 				{
-					std::vector<std::tuple<int, int, Piece::MoveType>> list = game.getFieldPos(xStart, yStart)->getPossibleMoves();
+					std::vector<Piece::SPieceMovement> list = game.getFieldPos(xStart, yStart)->getPossibleMoves();
 					for (const auto& value : list)
 					{
-						if (std::get<0>(value) == xEnd && std::get<1>(value) == yEnd)
+						if (value.x == xEnd && value.y == yEnd)
 						{
-							game.move(clickedOn, std::tuple<int, int, Piece::MoveType>(xEnd, yEnd, std::get<2>(value)));
+							game.move(clickedOn, std::tuple<int, int, Piece::MoveType>(xEnd, yEnd, value.moveType));
 							clickedOn->sayMyName();
 						}
 					}

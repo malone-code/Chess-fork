@@ -32,7 +32,7 @@ void King::sayMyName()
 
 void King::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 {
-	std::vector<std::tuple <int, int, Piece::MoveType>> moves;
+	std::vector<SPieceMovement> moves;
 	bool castles = true;
 	bool enemyPlace = false;
 
@@ -47,7 +47,7 @@ void King::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 					if (field[m_pos.x + dx][m_pos.y + dy]->getTeam() != m_team)
 					{
 						moves = pushMove(moves,
-							std::tuple<int, int, Piece::MoveType>(m_pos.x + dx, m_pos.y + dy, Piece::NORMAL),
+							{m_pos.x + dx, m_pos.y + dy, Piece::NORMAL},
 							getOwnKing(field),
 							field,
 							checkCheck);
@@ -56,10 +56,10 @@ void King::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 				else
 				{
 					moves = pushMove(moves,
-									 std::tuple<int, int, Piece::MoveType>(m_pos.x + dx, m_pos.y + dy, Piece::NORMAL),
-									 getOwnKing(field),
-									 field,
-									 checkCheck);
+						 {m_pos.x + dx, m_pos.y + dy, Piece::NORMAL},
+						 getOwnKing(field),
+						 field,
+						 checkCheck);
 				}
 			}
 		}
@@ -99,23 +99,23 @@ void King::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 									{
 										if (field[k][l]->getTeam() != m_team)
 										{
-											std::vector<std::tuple<int, int, Piece::MoveType>> notPossible = field[k][l]->getPossibleMoves();
+											std::vector<SPieceMovement> notPossible = field[k][l]->getPossibleMoves();
 											for (const auto& value : notPossible)
 											{
 												if (i == 0)
 												{
-													if ((std::get<0>(value) == 4 && std::get<1>(value) == j)
-														|| (std::get<0>(value) == 2 && std::get<1>(value) == j)
-														|| (std::get<0>(value) == 3 && std::get<1>(value) == j))
+													if ((value.x == 4 && value.y == j)
+														|| (value.x == 2 && value.y == j)
+														|| (value.x == 3 && value.y == j))
 													{
 														castles = false;
 													}
 												}
 												else
 												{
-													if ((std::get<0>(value) == 5 && std::get<1>(value) == j)
-														|| (std::get<0>(value) == 6 && std::get<1>(value) == j)
-														|| (std::get<0>(value) == 4 && std::get<1>(value) == j))
+													if ((value.x == 5 && value.y == j)
+														|| (value.x == 6 && value.y == j)
+														|| (value.x == 4 && value.y == j))
 													{
 														castles = false;
 													}
@@ -127,7 +127,7 @@ void King::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 							}
 							if (castles)
 							{
-								moves.push_back(std::tuple<int, int, Piece::MoveType>(i, j, Piece::CASTLE));
+								moves.push_back({i, j, Piece::CASTLE});
 							}
 						}
 					}
@@ -177,10 +177,10 @@ void King::setCheck(Piece* field[8][8], int x, int y)
 					else
 					{
 						field[i][j]->calcPossibleMoves(field, false);
-						std::vector<std::tuple<int, int, Piece::MoveType>> notPossible = field[i][j]->getPossibleMoves();
+						std::vector<SPieceMovement> notPossible = field[i][j]->getPossibleMoves();
 						for (const auto& value : notPossible)
 						{
-							if (std::get<0>(value) == x && std::get<1>(value) == y)
+							if (value.x == x && value.y == y)
 							{
 								check = true;
 							}

@@ -21,11 +21,7 @@ Piece::~Piece()
 	m_handler.undoPieceRender(m_pos.x, m_pos.y);
 }
 
-std::vector<std::tuple<int, int, Piece::MoveType>> Piece::pushMove(std::vector<std::tuple<int, int, Piece::MoveType>> moveList,
-																   std::tuple<int, int, Piece::MoveType> move,
-																   King* king,
-																   Piece* field[8][8],
-																   bool checkCheck)
+std::vector<Piece::SPieceMovement> Piece::pushMove(std::vector<Piece::SPieceMovement> moveList, Piece::SPieceMovement move, King* king, Piece* field[8][8], bool checkCheck)
 {
 	if (!checkCheck)
 	{
@@ -35,29 +31,29 @@ std::vector<std::tuple<int, int, Piece::MoveType>> Piece::pushMove(std::vector<s
 	{
 		bool enemyPlace = true;
 		king->setCheck(field, king->getPos().x, king->getPos().y);
-		Piece* zwisch = &(*field[std::get<0>(move)][std::get<1>(move)]);
+		Piece* zwisch = &(*field[move.x][move.y]);
 		enemyPlace = false;
 
-		if (field[std::get<0>(move)][std::get<1>(move)] != nullptr)
+		if (field[move.x][move.y] != nullptr)
 		{
 			enemyPlace = true;
-			field[std::get<0>(move)][std::get<1>(move)] = nullptr;
+			field[move.x][move.y] = nullptr;
 		}
 
-		std::swap(field[std::get<0>(move)][std::get<1>(move)], field[m_pos.x][m_pos.y]);
+		std::swap(field[move.x][move.y], field[m_pos.x][m_pos.y]);
 		if (m_type == KING)
 		{
-			king->setCheck(field, std::get<0>(move), std::get<1>(move));
+			king->setCheck(field, move.x, move.y);
 		}
 		else
 		{
 			king->setCheck(field, king->getPos().x, king->getPos().y);
 		}
-		std::swap(field[std::get<0>(move)][std::get<1>(move)], field[m_pos.x][m_pos.y]);
+		std::swap(field[move.x][move.y], field[m_pos.x][m_pos.y]);
 
 		if (enemyPlace)
 		{
-			field[std::get<0>(move)][std::get<1>(move)] = &(*zwisch);
+			field[move.x][move.y] = &(*zwisch);
 		}
 		if (!king->getCheck())
 		{
