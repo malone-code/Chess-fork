@@ -31,7 +31,7 @@ public:
 		int x, y;
 	};
 
-	Piece(Team team, const SPosition& pos, SDL_Handler& handler, PieceType type);
+	Piece(Team team, PieceType type, const SPosition& pos, SDL_Handler& handler);
 
 	Piece(const Piece& piece);
 

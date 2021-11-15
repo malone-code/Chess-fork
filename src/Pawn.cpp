@@ -4,7 +4,7 @@
 #include <list>
 
 Pawn::Pawn(Team team, const SPosition& pos, SDL_Handler& handler)
-	:Piece(team, pos, handler, PAWN), m_enPassant(std::pair<bool, int>(false, 0))
+	:Piece(team, PAWN, pos, handler), m_enPassant(std::pair<bool, int>(false, 0))
 {
 	std::string filename;
 	if (team == BLACK)

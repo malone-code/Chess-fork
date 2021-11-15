@@ -10,7 +10,7 @@ namespace {
 }
 
 King::King(Team team, const SPosition& pos, SDL_Handler& handler)
-	:Piece(team, pos, handler, KING), m_check(false)
+	:Piece(team, KING, pos, handler), m_check(false)
 {
 	std::string filename = (team == WHITE) ? kWhiteSprite : kBlackSprite;
 	m_texture = handler.loadImage(filename);

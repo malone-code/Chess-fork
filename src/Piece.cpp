@@ -4,13 +4,13 @@
 #include <string>
 #include <iostream>
 
-Piece::Piece(Team team, const SPosition& pos, SDL_Handler& handler, PieceType type)
-	:m_team(team), m_pos(pos), m_handler(handler), m_texture(NULL), m_hasMoved(false), m_type(type)
+Piece::Piece(Team team, PieceType type, const SPosition& pos, SDL_Handler& handler)
+	: m_team(team), m_type(type), m_pos(pos), m_handler(handler), m_texture(NULL), m_hasMoved(false)
 {
 }
 
 Piece::Piece(const Piece& piece)
-	:m_team(piece.m_team), m_pos(piece.m_pos), m_handler(piece.m_handler), m_texture(NULL), m_hasMoved(false), m_type(piece.m_type)
+	: m_team(piece.m_team), m_type(piece.m_type), m_pos(piece.m_pos), m_handler(piece.m_handler), m_texture(NULL), m_hasMoved(false)
 {
 }
 
@@ -95,7 +95,7 @@ void Piece::render()
 
 void Piece::printPieceStr()
 {
-	std::cout << getTeamStr(m_team) << " - " << getPieceTypeStr(m_type) << std::endl;
+	std::cout << getTeamStr(m_team) << " " << getPieceTypeStr(m_type) << std::endl;
 }
 
 std::string Piece::getTeamStr(Team team) {

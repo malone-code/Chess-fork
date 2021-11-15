@@ -3,7 +3,7 @@
 #include <iostream>
 
 Bishop::Bishop(Team team, const SPosition& pos, SDL_Handler& handler)
-	:Piece(team, pos, handler, BISHOP)
+	:Piece(team, BISHOP, pos, handler)
 {
 	std::string filename;
 	if (team == BLACK)

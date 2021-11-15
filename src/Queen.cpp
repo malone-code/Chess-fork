@@ -3,7 +3,7 @@
 #include <iostream>
 
 Queen::Queen(Team team, const SPosition& pos, SDL_Handler& handler)
-	:Piece(team, pos, handler, QUEEN)
+	:Piece(team, QUEEN, pos, handler)
 {
 	std::string filename;
 	if (team == BLACK)

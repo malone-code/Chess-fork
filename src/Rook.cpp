@@ -3,7 +3,7 @@
 #include <iostream>
 
 Rook::Rook(Team team, const SPosition& pos, SDL_Handler& handler)
-	:Piece(team, pos, handler, ROOK)
+	:Piece(team, ROOK, pos, handler)
 {
 	std::string filename;
 	if (team == BLACK)
