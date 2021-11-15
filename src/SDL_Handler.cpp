@@ -115,6 +115,7 @@ bool SDL_Handler::init()
 		if (m_window != NULL)
 		{
 			m_renderer = SDL_CreateRenderer(m_window, -1, 0);
+			SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 		}
 		else
 		{
