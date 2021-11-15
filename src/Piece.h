@@ -61,12 +61,14 @@ public:
 	void render();
 
 	// prints name of piece
-	virtual void sayMyName();
+	void printPieceStr();
 
 	// calculates every possible Move this piece can do
 	virtual void calcPossibleMoves(Piece* field[8][8], bool checkCheck) = 0;
 
 protected:
+	std::string getTeamStr(Team team);
+	std::string getPieceTypeStr(PieceType pieceType);
 
 	// texture of this piece
 	SDL_Texture* m_texture;

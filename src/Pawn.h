@@ -9,11 +9,8 @@ public:
     // constructor
     Pawn(Team team, const SPosition& pos, SDL_Handler& handler);
 
-    // prints name of piece
-    void sayMyName();
-
     // calculates possible moves
-    void calcPossibleMoves(Piece* field[8][8], bool checkCheck);
+    void calcPossibleMoves(Piece* field[8][8], bool checkCheck) override;
 
     // direction the pawn moves
     int m_dy;

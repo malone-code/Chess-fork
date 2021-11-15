@@ -1,4 +1,5 @@
 #include "Rook.h"
+
 #include <iostream>
 
 Rook::Rook(Team team, const SPosition& pos, SDL_Handler& handler)
@@ -16,18 +17,6 @@ Rook::Rook(Team team, const SPosition& pos, SDL_Handler& handler)
 	m_texture = handler.loadImage(filename);
 
 	render();
-}
-
-void Rook::sayMyName()
-{
-	if (m_team == BLACK)
-	{
-		std::cout << "BLACK ROOK" << std::endl;
-	}
-	else
-	{
-		std::cout << "WHITE ROOK" << std::endl;
-	}
 }
 
 void Rook::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
@@ -89,7 +78,3 @@ void Rook::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 	m_possibleMoves = moves;
 }
 
-
-Rook::~Rook()
-{
-}

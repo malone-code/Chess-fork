@@ -18,19 +18,6 @@ Queen::Queen(Team team, const SPosition& pos, SDL_Handler& handler)
 	render();
 }
 
-
-void Queen::sayMyName()
-{
-	if (m_team == BLACK)
-	{
-		std::cout << "BLACK QUEEN" << std::endl;
-	}
-	else
-	{
-		std::cout << "WHTIE QUEEN" << std::endl;
-	}
-}
-
 void Queen::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 {
 	std::vector<SPieceMovement> moves;
@@ -83,3 +70,4 @@ void Queen::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 
 	m_possibleMoves = moves;
 }
+

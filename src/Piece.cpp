@@ -93,8 +93,36 @@ void Piece::render()
 	m_handler.drawRectangle(src, dest, m_texture);
 }
 
-void Piece::sayMyName()
+void Piece::printPieceStr()
 {
-	std::cout << "No Piece here" << std::endl;
+	std::cout << getTeamStr(m_team) << " - " << getPieceTypeStr(m_type) << std::endl;
+}
+
+std::string Piece::getTeamStr(Team team) {
+	switch(team) {
+		case WHITE:
+			return "WHITE";
+		case BLACK:
+			return "BLACK";
+	}
+	return "Unknown Team";
+}
+
+std::string Piece::getPieceTypeStr(PieceType pieceType) {
+	switch(pieceType) {
+		case PAWN:
+			return "PAWN";
+		case KNIGHT:
+			return "KNIGHT";
+		case BISHOP:
+			return "BISHOP";
+		case ROOK:
+			return "ROOK";
+		case QUEEN:
+			return "QUEEN";
+		case KING:
+			return "KING";
+	}
+	return "Unknown PieceType";
 }
 

@@ -18,18 +18,6 @@ Knight::Knight(Team team, const SPosition& pos, SDL_Handler& handler)
 	render();
 }
 
-void Knight::sayMyName()
-{
-	if (m_team == BLACK)
-	{
-		std::cout << "BLACK KNIGHT" << std::endl;
-	}
-	else
-	{
-		std::cout << "WHTIE KNIGHT" << std::endl;
-	}
-}
-
 void Knight::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 {
 	std::vector<Piece::SPieceMovement> moves;

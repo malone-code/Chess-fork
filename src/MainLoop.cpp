@@ -64,7 +64,7 @@ void MainLoop::run()
 						if (value.x == xEnd && value.y == yEnd)
 						{
 							game.move(clickedOn, std::tuple<int, int, Piece::MoveType>(xEnd, yEnd, value.moveType));
-							clickedOn->sayMyName();
+							clickedOn->printPieceStr();
 						}
 					}
 					xStart = -1;

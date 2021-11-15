@@ -18,18 +18,6 @@ King::King(Team team, const SPosition& pos, SDL_Handler& handler)
 	render();
 }
 
-void King::sayMyName()
-{
-	if (m_team == BLACK)
-	{
-		std::cout << "BLACK KING" << std::endl;
-	}
-	else
-	{
-		std::cout << "WHTIE KING" << std::endl;
-	}
-}
-
 void King::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 {
 	std::vector<SPieceMovement> moves;
@@ -193,3 +181,4 @@ void King::setCheck(Piece* field[8][8], int x, int y)
 	
 	m_check = check;
 }
+
