@@ -1,19 +1,15 @@
 #include "Queen.h"
 
+#include "Resources.h"
+
 #include <iostream>
 
 Queen::Queen(Team team, const SPosition& pos, SDL_Handler& handler)
 	:Piece(team, QUEEN, pos, handler)
 {
-	std::string filename;
-	if (team == BLACK)
-	{
-		filename = "../res/Chess_qdt60.png";
-	}
-	else
-	{
-		filename = "../res/Chess_qlt60.png";
-	}
+	std::string filename = (team == WHITE) ?
+		Resources::PieceSprites::kWhiteQueen :
+		Resources::PieceSprites::kBlackQueen;
 	m_texture = handler.loadImage(filename);
 	render();
 }

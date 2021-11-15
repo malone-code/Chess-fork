@@ -1,19 +1,15 @@
 #include "Rook.h"
 
+#include "Resources.h"
+
 #include <iostream>
 
 Rook::Rook(Team team, const SPosition& pos, SDL_Handler& handler)
 	:Piece(team, ROOK, pos, handler)
 {
-	std::string filename;
-	if (team == BLACK)
-	{
-		filename = "../res/Chess_rdt60.png";
-	}
-	else
-	{
-		filename = "../res/Chess_rlt60.png";
-	}
+	std::string filename = (team == WHITE) ?
+		Resources::PieceSprites::kWhiteRook :
+		Resources::PieceSprites::kBlackRook;
 	m_texture = handler.loadImage(filename);
 
 	render();

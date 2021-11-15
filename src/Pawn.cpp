@@ -1,20 +1,16 @@
 #include "Pawn.h"
 
+#include "Resources.h"
+
 #include <iostream>
 #include <list>
 
 Pawn::Pawn(Team team, const SPosition& pos, SDL_Handler& handler)
 	:Piece(team, PAWN, pos, handler), m_enPassant(std::pair<bool, int>(false, 0))
 {
-	std::string filename;
-	if (team == BLACK)
-	{
-		filename = "../res/Chess_pdt60.png";
-	}
-	else
-	{
-		filename = "../res/Chess_plt60.png";
-	}
+	std::string filename = (team == WHITE) ?
+		Resources::PieceSprites::kWhitePawn :
+		Resources::PieceSprites::kBlackPawn;
 	m_texture = handler.loadImage(filename);
 
 	if (team == BLACK)

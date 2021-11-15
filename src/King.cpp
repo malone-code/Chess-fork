@@ -1,18 +1,17 @@
 #include "King.h"
 #include "Pawn.h"
 
+#include "Resources.h"
+
 #include <iostream>
 #include <stdlib.h>
-
-namespace {
-	const char* const kBlackSprite = "../res/Chess_kdt60.png";
-	const char* const kWhiteSprite = "../res/Chess_klt60.png";
-}
 
 King::King(Team team, const SPosition& pos, SDL_Handler& handler)
 	:Piece(team, KING, pos, handler), m_check(false)
 {
-	std::string filename = (team == WHITE) ? kWhiteSprite : kBlackSprite;
+	std::string filename = (team == WHITE) ?
+		Resources::PieceSprites::kWhiteKing :
+		Resources::PieceSprites::kBlackKing;
 	m_texture = handler.loadImage(filename);
 
 	render();

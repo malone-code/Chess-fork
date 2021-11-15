@@ -1,19 +1,15 @@
 #include "Bishop.h"
 
+#include "Resources.h"
+
 #include <iostream>
 
 Bishop::Bishop(Team team, const SPosition& pos, SDL_Handler& handler)
 	:Piece(team, BISHOP, pos, handler)
 {
-	std::string filename;
-	if (team == BLACK)
-	{
-		filename = "../res/Chess_bdt60.png";
-	}
-	else
-	{
-		filename = "../res/Chess_blt60.png";
-	}
+	std::string filename = (team == WHITE) ?
+		Resources::PieceSprites::kWhiteBishop :
+		Resources::PieceSprites::kBlackBishop;
 	m_texture = handler.loadImage(filename);
 	render();
 }

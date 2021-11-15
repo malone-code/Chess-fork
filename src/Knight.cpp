@@ -1,19 +1,15 @@
 #include "Knight.h"
 
+#include "Resources.h"
+
 #include <iostream>
 
 Knight::Knight(Team team, const SPosition& pos, SDL_Handler& handler)
 	:Piece(team, KNIGHT, pos, handler)
 {
-	std::string filename;
-	if (team == BLACK)
-	{
-		filename = "../res/Chess_ndt60.png";
-	}
-	else
-	{
-		filename = "../res/Chess_nlt60.png";
-	}
+	std::string filename = (team == WHITE) ?
+		Resources::PieceSprites::kWhiteKnight :
+		Resources::PieceSprites::kBlackKnight;
 	m_texture = handler.loadImage(filename);
 	render();
 }
