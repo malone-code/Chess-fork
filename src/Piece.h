@@ -25,26 +25,30 @@ public:
 		int x, y;
 	};
 
-	// returns list of possible Moves
-	std::vector<std::tuple <int, int, Piece::MoveType>> getPossibleMoves() { return m_possibleMoves; };
-
-	// return whether BLACK or WHITE
-	Team getTeam() { return m_team; };
-
-	// sets new position
-	void setPosition(SPosition newPos) { m_pos = newPos; };
-
-	// return position of piece
-	const SPosition& getPos() { return m_pos; };
-
-	// Constructor
 	Piece(Team team, const SPosition& pos, SDL_Handler& handler, PieceType type);
 
-	// Copy-Constructor
 	Piece(const Piece& piece);
 
-	// Destructor
 	~Piece();
+
+	// returns list of possible Moves
+	std::vector<std::tuple <int, int, Piece::MoveType>> getPossibleMoves() { return m_possibleMoves; }
+
+	// return whether BLACK or WHITE
+	Team getTeam() { return m_team; }
+
+	// sets new position
+	void setPosition(SPosition newPos) { m_pos = newPos; }
+
+	// return position of piece
+	const SPosition& getPos() { return m_pos; }
+
+	// returns type of piece
+	PieceType getType() { return m_type; }
+
+	bool hasMoved() const { return m_hasMoved; }
+
+	void setHasMoved() { m_hasMoved = true; }
 
 	//render this piece
 	void render();
@@ -54,12 +58,6 @@ public:
 
 	// calculates every possible Move this piece can do
 	virtual void calcPossibleMoves(Piece* field[8][8], bool checkCheck) = 0;
-
-	// true, if piece has moved
-	bool m_hasMoved;
-
-	// returns type of piece
-	PieceType getType() { return m_type; };
 
 protected:
 
@@ -74,6 +72,9 @@ protected:
  
 	// The Type of Piece
 	PieceType m_type;
+
+	// true, if piece has moved
+	bool m_hasMoved;
 
 	// List of possible Moves this piece can do <row, col>
 	std::vector<std::tuple <int, int, Piece::MoveType>> m_possibleMoves;

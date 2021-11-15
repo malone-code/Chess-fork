@@ -11,13 +11,13 @@ class SDL_Handler
 {
 public:
 
-	SDL_Handler();
-
-	~SDL_Handler();
-
 	// Screen size
 	const int SCREEN_WIDTH = 640;
 	const int SCREEN_HEIGHT = 640;
+
+	SDL_Handler();
+
+	~SDL_Handler();
 
 	// initialize the field
 	// returns true, if everything worked

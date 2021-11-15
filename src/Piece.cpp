@@ -4,6 +4,23 @@
 #include <string>
 #include <iostream>
 
+Piece::Piece(Team team, const SPosition& pos, SDL_Handler& handler, PieceType type)
+	:m_team(team), m_pos(pos), m_handler(handler), m_texture(NULL), m_hasMoved(false), m_type(type)
+{
+}
+
+Piece::Piece(const Piece& piece)
+	:m_team(piece.m_team), m_pos(piece.m_pos), m_handler(piece.m_handler), m_texture(NULL), m_hasMoved(false), m_type(piece.m_type)
+{
+}
+
+Piece::~Piece()
+{
+	SDL_DestroyTexture(m_texture);
+
+	m_handler.undoPieceRender(m_pos.x, m_pos.y);
+}
+
 std::vector<std::tuple<int, int, Piece::MoveType>> Piece::pushMove(std::vector<std::tuple<int, int, Piece::MoveType>> moveList,
 																   std::tuple<int, int, Piece::MoveType> move,
 																   King* king,
@@ -70,24 +87,6 @@ King* Piece::getOwnKing(Piece* field[8][8])
 	return nullptr;
 }
 
-Piece::Piece(Team team, const SPosition& pos, SDL_Handler& handler, PieceType type)
-	:m_team(team), m_pos(pos), m_handler(handler), m_texture(NULL), m_hasMoved(false), m_type(type)
-{
-}
-
-Piece::Piece(const Piece& piece)
-	:m_team(piece.m_team), m_pos(piece.m_pos), m_handler(piece.m_handler), m_texture(NULL), m_hasMoved(false), m_type(piece.m_type)
-{
-}
-
-Piece::~Piece()
-{
-	SDL_DestroyTexture(m_texture);
-
-	m_handler.undoPieceRender(m_pos.x, m_pos.y);
-}
-
-
 void Piece::render()
 {
 	SDL_Rect src = {0, 0, 60, 60};
@@ -102,3 +101,4 @@ void Piece::sayMyName()
 {
 	std::cout << "No Piece here" << std::endl;
 }
+

@@ -70,7 +70,7 @@ void Pawn::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 
 	if ((m_pos.y + 2 * m_dy >= 0) && (m_pos.y + 2 * m_dy <= 7))
 	{
-		if (field[m_pos.x][m_pos.y + 2 * m_dy] == nullptr && !m_hasMoved)
+		if (field[m_pos.x][m_pos.y + 2 * m_dy] == nullptr && !hasMoved())
 		{
 			moves = pushMove(moves,
 				std::tuple<int, int, Piece::MoveType>(m_pos.x, m_pos.y + 2 * m_dy, Piece::NORMAL),

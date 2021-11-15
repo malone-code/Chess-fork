@@ -14,16 +14,16 @@ SDL_Handler::~SDL_Handler()
 
 SDL_Texture* SDL_Handler::loadImage(const std::string& filename)
 {
-	SDL_Surface* loadedImage = NULL;
+	SDL_Texture* text = nullptr;
 
-	loadedImage = IMG_Load(filename.c_str());
-
-	if (loadedImage == NULL)
+	if (SDL_Surface* loadedImage = IMG_Load(filename.c_str()))
 	{
-		std::cout << "couldnt load " << filename << std::endl;
+		text = SDL_CreateTextureFromSurface(m_renderer, loadedImage);
 	}
-
-	SDL_Texture* text = SDL_CreateTextureFromSurface(m_renderer, loadedImage);
+	else
+	{
+		std::cout << "Couldnt load " << filename << std::endl;
+	}
 
 	return text;
 }

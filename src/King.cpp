@@ -4,18 +4,15 @@
 #include <iostream>
 #include <stdlib.h>
 
+namespace {
+	const char* const kBlackSprite = "../res/Chess_kdt60.png";
+	const char* const kWhiteSprite = "../res/Chess_klt60.png";
+}
+
 King::King(Team team, const SPosition& pos, SDL_Handler& handler)
 	:Piece(team, pos, handler, KING), m_check(false)
 {
-	std::string filename;
-	if (team == BLACK)
-	{
-		filename = "../res/Chess_kdt60.png";
-	}
-	else
-	{
-		filename = "../res/Chess_klt60.png";
-	}
+	std::string filename = (team == WHITE) ? kWhiteSprite : kBlackSprite;
 	m_texture = handler.loadImage(filename);
 
 	render();
@@ -68,7 +65,7 @@ void King::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 		}
 	}
 
-	if (!m_hasMoved)
+	if (!hasMoved())
 	{
 		for (int i = 0; i <= 7; i += 7)
 		{
@@ -77,7 +74,7 @@ void King::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 				castles = true;
 				if (field[i][j] != nullptr)
 				{
-					if (field[i][j]->getTeam() == m_team && field[i][j]->getType() == ROOK && !field[i][j]->m_hasMoved)
+					if (field[i][j]->getTeam() == m_team && field[i][j]->getType() == ROOK && !field[i][j]->hasMoved())
 					{
 						int a, b, c;
 						if (i == 0)

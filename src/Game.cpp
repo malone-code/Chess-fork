@@ -88,18 +88,15 @@ Game::Game(SDL_Handler& handler)
 
     calcAllMoves();
 }
- 
 
 Game::~Game()
 {
 }
 
-
 Piece* Game::getFieldPos(int row, int col)
 {
     return m_field[row][col];
 }
-
 
 void Game::move(Piece* start, std::tuple<int, int, Piece::MoveType> move)
 {
@@ -133,11 +130,10 @@ void Game::move(Piece* start, std::tuple<int, int, Piece::MoveType> move)
     gameState();
 }
 
-
 void Game::normal(int xStart, int yStart, int xEnd, int yEnd)
 {
     m_field[xEnd][yEnd] = getFieldPos(xStart, yStart);
-    m_field[xEnd][yEnd]->m_hasMoved = true;
+    m_field[xEnd][yEnd]->setHasMoved();
     m_field[xStart][yStart] = nullptr;
     m_handler.undoPieceRender(xStart, yStart);
     m_field[xEnd][yEnd]->setPosition({xEnd, yEnd});
@@ -180,20 +176,18 @@ void Game::normal(int xStart, int yStart, int xEnd, int yEnd)
     }
 }
 
-
 void Game::enPassant(int xStart, int yStart, int xEnd, int yEnd)
 {
     Pawn* pawn_start = static_cast<Pawn*>(m_field[xStart][yStart]);
     m_field[xEnd][yEnd - pawn_start->m_dy] = nullptr;
     m_field[xEnd][yEnd] = getFieldPos(xStart, yStart);
-    m_field[xEnd][yEnd]->m_hasMoved = true;
+    m_field[xEnd][yEnd]->setHasMoved();
     m_field[xStart][yStart] = nullptr;
     m_handler.undoPieceRender(xStart, yStart);
     m_handler.undoPieceRender(xEnd, yEnd - pawn_start->m_dy);
     m_field[xEnd][yEnd]->setPosition({xEnd, yEnd});
     m_field[xEnd][yEnd]->render();
 }
-
 
 void Game::exchange(int xStart, int yStart, int xEnd, int yEnd)
 {
@@ -318,8 +312,8 @@ void Game::castles(int xStart, int yStart, int xEnd, int yEnd)
     {
         m_field[2][yEnd] = m_field[4][yEnd];
         m_field[3][yEnd] = m_field[0][yEnd];
-        m_field[2][yEnd]->m_hasMoved = true;
-        m_field[3][yEnd]->m_hasMoved = true;
+        m_field[2][yEnd]->setHasMoved();
+        m_field[3][yEnd]->setHasMoved();
         m_field[2][yEnd]->setPosition({2, yEnd});
         m_field[3][yEnd]->setPosition({3, yEnd});
         m_field[4][yEnd] = nullptr;
@@ -333,8 +327,8 @@ void Game::castles(int xStart, int yStart, int xEnd, int yEnd)
     {
         m_field[6][yEnd] = m_field[4][yEnd];
         m_field[5][yEnd] = m_field[7][yEnd];
-        m_field[6][yEnd]->m_hasMoved = true;
-        m_field[5][yEnd]->m_hasMoved = true;
+        m_field[6][yEnd]->setHasMoved();
+        m_field[5][yEnd]->setHasMoved();
         m_field[6][yEnd]->setPosition({6, yEnd});
         m_field[5][yEnd]->setPosition({5, yEnd});
         m_field[4][yEnd] = nullptr;
