@@ -41,7 +41,7 @@ void Bishop::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 				&& (mPosition.x + dx_copy >= 0 && mPosition.x + dx_copy <= 7 && mPosition.y + dy_copy >= 0 && mPosition.y + dy_copy <= 7))
 			{
 				moves = pushMove(moves,
-					     { mPosition.x + dx_copy, mPosition.y + dy_copy, Piece::NORMAL },
+						 { mPosition.x + dx_copy, mPosition.y + dy_copy, Piece::NORMAL },
 						 getOwnKing(field),
 						 field,
 						 checkCheck);
@@ -79,6 +79,4 @@ void Bishop::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 
 	mPossibleMoves = moves;
 }
-
-
 

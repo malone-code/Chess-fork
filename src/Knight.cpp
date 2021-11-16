@@ -78,3 +78,4 @@ void Knight::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 
 	mPossibleMoves = moves;
 }
+

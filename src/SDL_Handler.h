@@ -5,7 +5,6 @@
 
 #include <string>
 
-
 class SDL_Handler
 {
 public:
