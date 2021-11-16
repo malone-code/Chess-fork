@@ -6,6 +6,8 @@
 #include <iostream>
 #include <stdlib.h>
 
+// TODO fix castling for King after moved from D1 to E1
+
 King::King(Team team, const SPosition& pos, SDL_Handler& handler)
 	:Piece(team, KING, pos, handler), m_check(false)
 {

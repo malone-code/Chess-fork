@@ -1,88 +1,90 @@
 #include "Game.h"
 
+#include "Resources.h"
+
 #include <iostream>
 
 Game::Game(SDL_Handler& handler)
-       :pl1(new Pawn(Piece::WHITE, {0, 1}, handler)),
-        pl2(new Pawn(Piece::WHITE, {1, 1}, handler)),
-        pl3(new Pawn(Piece::WHITE, {2, 1}, handler)),
-        pl4(new Pawn(Piece::WHITE, {3, 1}, handler)),
-        pl5(new Pawn(Piece::WHITE, {4, 1}, handler)),
-        pl6(new Pawn(Piece::WHITE, {5, 1}, handler)),
-        pl7(new Pawn(Piece::WHITE, {6, 1}, handler)),
-        pl8(new Pawn(Piece::WHITE, {7, 1}, handler)),
-        pb1(new Pawn(Piece::BLACK, {0, 6}, handler)),
-        pb2(new Pawn(Piece::BLACK, {1, 6}, handler)),
-        pb3(new Pawn(Piece::BLACK, {2, 6}, handler)),
-        pb4(new Pawn(Piece::BLACK, {3, 6}, handler)),
-        pb5(new Pawn(Piece::BLACK, {4, 6}, handler)),
-        pb6(new Pawn(Piece::BLACK, {5, 6}, handler)),
-        pb7(new Pawn(Piece::BLACK, {6, 6}, handler)),
-        pb8(new Pawn(Piece::BLACK, {7, 6}, handler)),
-        rb1(new Rook(Piece::BLACK, {0, 7}, handler)),
-        rb2(new Rook(Piece::BLACK, {7, 7}, handler)),
-        rl1(new Rook(Piece::WHITE, {0, 0}, handler)),
-        rl2(new Rook(Piece::WHITE, {7, 0}, handler)),
-        nb1(new Knight(Piece::BLACK, {1, 7}, handler)),
-        nb2(new Knight(Piece::BLACK, {6, 7}, handler)),
-        nl1(new Knight(Piece::WHITE, {1, 0}, handler)),
-        nl2(new Knight(Piece::WHITE, {6, 0}, handler)),
-        bb1(new Bishop(Piece::BLACK, {2, 7}, handler)),
-        bb2(new Bishop(Piece::BLACK, {5, 7}, handler)),
-        bl1(new Bishop(Piece::WHITE, {2, 0}, handler)),
-        bl2(new Bishop(Piece::WHITE, {5, 0}, handler)),
-        kb1(new King(Piece::BLACK, {4, 7}, handler)),
-        kl1(new King(Piece::WHITE, {4, 0}, handler)),
-        qb1(new Queen(Piece::BLACK, {3, 7}, handler)),
-        ql1(new Queen(Piece::WHITE, {3, 0}, handler)),
-        m_turn(Piece::WHITE),
-        m_handler(handler),
-        m_checkEnPassant(true)
+	: mSDLHandler(handler)
+	, mTurn(Piece::WHITE)
+	, mCheckEnPassant(true)
+	, pl1(new Pawn(Piece::WHITE, {0, 1}, handler))
+	, pl2(new Pawn(Piece::WHITE, {1, 1}, handler))
+	, pl3(new Pawn(Piece::WHITE, {2, 1}, handler))
+	, pl4(new Pawn(Piece::WHITE, {3, 1}, handler))
+	, pl5(new Pawn(Piece::WHITE, {4, 1}, handler))
+	, pl6(new Pawn(Piece::WHITE, {5, 1}, handler))
+	, pl7(new Pawn(Piece::WHITE, {6, 1}, handler))
+	, pl8(new Pawn(Piece::WHITE, {7, 1}, handler))
+	, pb1(new Pawn(Piece::BLACK, {0, 6}, handler))
+	, pb2(new Pawn(Piece::BLACK, {1, 6}, handler))
+	, pb3(new Pawn(Piece::BLACK, {2, 6}, handler))
+	, pb4(new Pawn(Piece::BLACK, {3, 6}, handler))
+	, pb5(new Pawn(Piece::BLACK, {4, 6}, handler))
+	, pb6(new Pawn(Piece::BLACK, {5, 6}, handler))
+	, pb7(new Pawn(Piece::BLACK, {6, 6}, handler))
+	, pb8(new Pawn(Piece::BLACK, {7, 6}, handler))
+	, rb1(new Rook(Piece::BLACK, {0, 7}, handler))
+	, rb2(new Rook(Piece::BLACK, {7, 7}, handler))
+	, rl1(new Rook(Piece::WHITE, {0, 0}, handler))
+	, rl2(new Rook(Piece::WHITE, {7, 0}, handler))
+	, nb1(new Knight(Piece::BLACK, {1, 7}, handler))
+	, nb2(new Knight(Piece::BLACK, {6, 7}, handler))
+	, nl1(new Knight(Piece::WHITE, {1, 0}, handler))
+	, nl2(new Knight(Piece::WHITE, {6, 0}, handler))
+	, bb1(new Bishop(Piece::BLACK, {2, 7}, handler))
+	, bb2(new Bishop(Piece::BLACK, {5, 7}, handler))
+	, bl1(new Bishop(Piece::WHITE, {2, 0}, handler))
+	, bl2(new Bishop(Piece::WHITE, {5, 0}, handler))
+	, kb1(new King(Piece::BLACK, {3, 7}, handler))
+	, kl1(new King(Piece::WHITE, {3, 0}, handler))
+	, qb1(new Queen(Piece::BLACK, {4, 7}, handler))
+	, ql1(new Queen(Piece::WHITE, {4, 0}, handler))
 {
-    m_field[0][7] = rb1;
-    m_field[7][7] = rb2;
-    m_field[0][0] = rl1;
-    m_field[7][0] = rl2;
+    mField[0][7] = rb1;
+    mField[7][7] = rb2;
+    mField[0][0] = rl1;
+    mField[7][0] = rl2;
 
-    m_field[1][7] = nb1;
-    m_field[6][7] = nb2;
-    m_field[1][0] = nl1;
-    m_field[6][0] = nl2;
+    mField[1][7] = nb1;
+    mField[6][7] = nb2;
+    mField[1][0] = nl1;
+    mField[6][0] = nl2;
 
-    m_field[2][7] = bb1;
-    m_field[5][7] = bb2;
-    m_field[2][0] = bl1;
-    m_field[5][0] = bl2;
+    mField[2][7] = bb1;
+    mField[5][7] = bb2;
+    mField[2][0] = bl1;
+    mField[5][0] = bl2;
 
-    m_field[4][7] = kb1;
-    m_field[4][0] = kl1;
+    mField[4][7] = qb1;
+    mField[4][0] = ql1;
 
-    m_field[3][7] = qb1;
-    m_field[3][0] = ql1;
+    mField[3][7] = kb1;
+    mField[3][0] = kl1;
 
-    m_field[0][1] = pl1;
-    m_field[1][1] = pl2;
-    m_field[2][1] = pl3;
-    m_field[3][1] = pl4;
-    m_field[4][1] = pl5;
-    m_field[5][1] = pl6;
-    m_field[6][1] = pl7;
-    m_field[7][1] = pl8;
+    mField[0][1] = pl1;
+    mField[1][1] = pl2;
+    mField[2][1] = pl3;
+    mField[3][1] = pl4;
+    mField[4][1] = pl5;
+    mField[5][1] = pl6;
+    mField[6][1] = pl7;
+    mField[7][1] = pl8;
 
-    m_field[0][6] = pb1;
-    m_field[1][6] = pb2;
-    m_field[2][6] = pb3;
-    m_field[3][6] = pb4;
-    m_field[4][6] = pb5;
-    m_field[5][6] = pb6;
-    m_field[6][6] = pb7;
-    m_field[7][6] = pb8;
+    mField[0][6] = pb1;
+    mField[1][6] = pb2;
+    mField[2][6] = pb3;
+    mField[3][6] = pb4;
+    mField[4][6] = pb5;
+    mField[5][6] = pb6;
+    mField[6][6] = pb7;
+    mField[7][6] = pb8;
 
     for (int i = 2; i < 6; ++i)
     {
         for (int j = 0; j < 8; ++j)
         {
-            m_field[j][i] = nullptr;
+            mField[j][i] = nullptr;
         }
     }
 
@@ -95,18 +97,18 @@ Game::~Game()
 
 Piece* Game::getFieldPos(int row, int col)
 {
-    return m_field[row][col];
+    return mField[row][col];
 }
 
 void Game::move(Piece* start, std::tuple<int, int, Piece::MoveType> move)
 {
-    if (m_checkEnPassant)
+    if (mCheckEnPassant)
     {
         disableEnPassant();
     }
     else
     {
-        m_checkEnPassant = true;
+        mCheckEnPassant = true;
     }
 
     switch (std::get<2>(move))
@@ -132,43 +134,43 @@ void Game::move(Piece* start, std::tuple<int, int, Piece::MoveType> move)
 
 void Game::normal(int xStart, int yStart, int xEnd, int yEnd)
 {
-    m_field[xEnd][yEnd] = getFieldPos(xStart, yStart);
-    m_field[xEnd][yEnd]->setHasMoved();
-    m_field[xStart][yStart] = nullptr;
-    m_handler.undoPieceRender(xStart, yStart);
-    m_field[xEnd][yEnd]->setPosition({xEnd, yEnd});
-    if (m_field[xEnd][yEnd] != nullptr)
+    mField[xEnd][yEnd] = getFieldPos(xStart, yStart);
+    mField[xEnd][yEnd]->setHasMoved();
+    mField[xStart][yStart] = nullptr;
+    mSDLHandler.undoPieceRender(xStart, yStart);
+    mField[xEnd][yEnd]->setPosition({xEnd, yEnd});
+    if (mField[xEnd][yEnd] != nullptr)
     {
-        m_handler.undoPieceRender(xEnd, yEnd);
+        mSDLHandler.undoPieceRender(xEnd, yEnd);
     }
-    m_field[xEnd][yEnd]->render();
+    mField[xEnd][yEnd]->render();
 
-    if (m_field[xEnd][yEnd]->getType() == Piece::PAWN)
+    if (mField[xEnd][yEnd]->getType() == Piece::PAWN)
     {
         if (abs(yEnd - yStart) == 2)
         {
             if (xEnd - 1 >= 0)
             {
-                if (m_field[xEnd - 1][yEnd] != nullptr)
+                if (mField[xEnd - 1][yEnd] != nullptr)
                 {
-                    if (m_field[xEnd - 1][yEnd]->getType() == Piece::PAWN)
+                    if (mField[xEnd - 1][yEnd]->getType() == Piece::PAWN)
                     {
-                        Pawn* pwn = static_cast<Pawn*>(m_field[xEnd - 1][yEnd]);
+                        Pawn* pwn = static_cast<Pawn*>(mField[xEnd - 1][yEnd]);
                         pwn->setEnPassant(std::pair<bool, int>(true, -1));
-                        m_checkEnPassant = false;
+                        mCheckEnPassant = false;
                     }
                 }
             }
 
             if (xEnd + 1 <= 7)
             {
-                if (m_field[xEnd + 1][yEnd] != nullptr)
+                if (mField[xEnd + 1][yEnd] != nullptr)
                 {
-                    if (m_field[xEnd + 1][yEnd]->getType() == Piece::PAWN)
+                    if (mField[xEnd + 1][yEnd]->getType() == Piece::PAWN)
                     {
-                        Pawn* pwn = static_cast<Pawn*>(m_field[xEnd + 1][yEnd]);
+                        Pawn* pwn = static_cast<Pawn*>(mField[xEnd + 1][yEnd]);
                         pwn->setEnPassant(std::pair<bool, int>(true, 1));
-                        m_checkEnPassant = false;
+                        mCheckEnPassant = false;
                     }
                 }
             }
@@ -178,59 +180,59 @@ void Game::normal(int xStart, int yStart, int xEnd, int yEnd)
 
 void Game::enPassant(int xStart, int yStart, int xEnd, int yEnd)
 {
-    Pawn* pawn_start = static_cast<Pawn*>(m_field[xStart][yStart]);
-    m_field[xEnd][yEnd - pawn_start->m_dy] = nullptr;
-    m_field[xEnd][yEnd] = getFieldPos(xStart, yStart);
-    m_field[xEnd][yEnd]->setHasMoved();
-    m_field[xStart][yStart] = nullptr;
-    m_handler.undoPieceRender(xStart, yStart);
-    m_handler.undoPieceRender(xEnd, yEnd - pawn_start->m_dy);
-    m_field[xEnd][yEnd]->setPosition({xEnd, yEnd});
-    m_field[xEnd][yEnd]->render();
+    Pawn* pawn_start = static_cast<Pawn*>(mField[xStart][yStart]);
+    mField[xEnd][yEnd - pawn_start->m_dy] = nullptr;
+    mField[xEnd][yEnd] = getFieldPos(xStart, yStart);
+    mField[xEnd][yEnd]->setHasMoved();
+    mField[xStart][yStart] = nullptr;
+    mSDLHandler.undoPieceRender(xStart, yStart);
+    mSDLHandler.undoPieceRender(xEnd, yEnd - pawn_start->m_dy);
+    mField[xEnd][yEnd]->setPosition({xEnd, yEnd});
+    mField[xEnd][yEnd]->render();
 }
 
 void Game::exchange(int xStart, int yStart, int xEnd, int yEnd)
 {
-    SDL_Texture* text_rook = m_handler.loadImage("../res/Chess_rlt60.png");
-    SDL_Texture* text_knight = m_handler.loadImage("../res/Chess_nlt60.png");
-    SDL_Texture* text_bishop = m_handler.loadImage("../res/Chess_blt60.png");
-    SDL_Texture* text_queen = m_handler.loadImage("../res/Chess_qlt60.png");
+    SDL_Texture* text_rook = mSDLHandler.loadImage(Resources::PieceSprites::kWhiteRook);
+    SDL_Texture* text_knight = mSDLHandler.loadImage(Resources::PieceSprites::kWhiteKnight);
+    SDL_Texture* text_bishop = mSDLHandler.loadImage(Resources::PieceSprites::kWhiteBishop);
+    SDL_Texture* text_queen = mSDLHandler.loadImage(Resources::PieceSprites::kWhiteQueen);
     int y_draw = 0;
     Piece::Team team = Piece::WHITE;
 
-    if (m_field[xStart][yStart]->getTeam() == Piece::BLACK)
+    if (mField[xStart][yStart]->getTeam() == Piece::BLACK)
     {
-        text_rook = m_handler.loadImage("../res/Chess_rdt60.png");
-        text_knight = m_handler.loadImage("../res/Chess_ndt60.png");
-        text_bishop = m_handler.loadImage("../res/Chess_bdt60.png");
-        text_queen = m_handler.loadImage("../res/Chess_qdt60.png");
-        y_draw = 3 * m_handler.SCREEN_HEIGHT / 4;
+        text_rook = mSDLHandler.loadImage(Resources::PieceSprites::kBlackRook);
+        text_knight = mSDLHandler.loadImage(Resources::PieceSprites::kBlackKnight);
+        text_bishop = mSDLHandler.loadImage(Resources::PieceSprites::kBlackBishop);
+        text_queen = mSDLHandler.loadImage(Resources::PieceSprites::kBlackQueen);
+        y_draw = 3 * mSDLHandler.SCREEN_HEIGHT / 4;
         team = Piece::BLACK;
     }
 
-    SDL_SetRenderDrawColor(m_handler.m_renderer, 155, 103, 60, 255);
+    SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 155, 103, 60, 255);
     SDL_Rect rectangle = {0,
                           y_draw,
-                          m_handler.SCREEN_WIDTH / 4,
-                          m_handler.SCREEN_HEIGHT / 4 };
-    SDL_RenderFillRect(m_handler.m_renderer, &rectangle);
-    SDL_Rect src = { 0, 0, 60, 60 };
-    m_handler.drawRectangle(src, rectangle, text_rook);
+                          mSDLHandler.SCREEN_WIDTH / 4,
+                          mSDLHandler.SCREEN_HEIGHT / 4 };
+    SDL_RenderFillRect(mSDLHandler.mRenderer, &rectangle);
+    SDL_Rect src = { 0, 0, 150, 150 };
+    mSDLHandler.drawRectangle(src, rectangle, text_rook);
 
-    SDL_SetRenderDrawColor(m_handler.m_renderer, 255, 255, 255, 255);
-    rectangle.x = m_handler.SCREEN_WIDTH / 4;
-    SDL_RenderFillRect(m_handler.m_renderer, &rectangle);
-    m_handler.drawRectangle(src, rectangle, text_knight);
+    SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 255, 255, 255, 255);
+    rectangle.x = mSDLHandler.SCREEN_WIDTH / 4;
+    SDL_RenderFillRect(mSDLHandler.mRenderer, &rectangle);
+    mSDLHandler.drawRectangle(src, rectangle, text_knight);
 
-    SDL_SetRenderDrawColor(m_handler.m_renderer, 155, 103, 60, 255);
-    rectangle.x = 2 * m_handler.SCREEN_WIDTH / 4;
-    SDL_RenderFillRect(m_handler.m_renderer, &rectangle);
-    m_handler.drawRectangle(src, rectangle, text_bishop);
+    SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 155, 103, 60, 255);
+    rectangle.x = 2 * mSDLHandler.SCREEN_WIDTH / 4;
+    SDL_RenderFillRect(mSDLHandler.mRenderer, &rectangle);
+    mSDLHandler.drawRectangle(src, rectangle, text_bishop);
 
-    SDL_SetRenderDrawColor(m_handler.m_renderer, 255, 255, 255, 255);
-    rectangle.x = 3 * m_handler.SCREEN_WIDTH / 4;
-    SDL_RenderFillRect(m_handler.m_renderer, &rectangle);
-    m_handler.drawRectangle(src, rectangle, text_queen);
+    SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 255, 255, 255, 255);
+    rectangle.x = 3 * mSDLHandler.SCREEN_WIDTH / 4;
+    SDL_RenderFillRect(mSDLHandler.mRenderer, &rectangle);
+    mSDLHandler.drawRectangle(src, rectangle, text_queen);
 
     bool quit = false;
     int x = -1;
@@ -242,59 +244,59 @@ void Game::exchange(int xStart, int yStart, int xEnd, int yEnd)
     
     while (quit == false)
     {
-        while (SDL_PollEvent(&m_handler.m_event))
+        while (SDL_PollEvent(&mSDLHandler.mEvent))
         {
-            if (m_handler.m_event.type == SDL_QUIT)
+            if (mSDLHandler.mEvent.type == SDL_QUIT)
             {
                 quit = true;
             }
 
-            if (m_handler.m_event.type == SDL_MOUSEBUTTONDOWN)
+            if (mSDLHandler.mEvent.type == SDL_MOUSEBUTTONDOWN)
             {
-                x = m_handler.m_event.button.x / 160;
-                y = m_handler.m_event.button.y / 160;
+                x = mSDLHandler.mEvent.button.x / 160;
+                y = mSDLHandler.mEvent.button.y / 160;
                 
                 if (y >= y_draw / 160 && y < y_draw / 160 + 1)
                 {
-                    if (x < m_handler.SCREEN_WIDTH / 640)
+                    if (x < mSDLHandler.SCREEN_WIDTH / 640)
                     {
-                        clickedOn = new Rook(team, {xEnd, yEnd}, m_handler);
+                        clickedOn = new Rook(team, {xEnd, yEnd}, mSDLHandler);
                     }
-                    else if (x < 2 * m_handler.SCREEN_WIDTH / 640)
+                    else if (x < 2 * mSDLHandler.SCREEN_WIDTH / 640)
                     {
-                        clickedOn = new Knight(team, {xEnd, yEnd}, m_handler);
+                        clickedOn = new Knight(team, {xEnd, yEnd}, mSDLHandler);
                     }
-                    else if (x < 3 * m_handler.SCREEN_WIDTH / 640)
+                    else if (x < 3 * mSDLHandler.SCREEN_WIDTH / 640)
                     {
-                        clickedOn = new Bishop(team, {xEnd, yEnd}, m_handler);
+                        clickedOn = new Bishop(team, {xEnd, yEnd}, mSDLHandler);
                     }
-                    else if (x <= 4 * m_handler.SCREEN_WIDTH / 640)
+                    else if (x <= 4 * mSDLHandler.SCREEN_WIDTH / 640)
                     {
-                        clickedOn = new Queen(team, {xEnd, yEnd}, m_handler);
+                        clickedOn = new Queen(team, {xEnd, yEnd}, mSDLHandler);
                     }
-                    std::cout << x << " " << m_handler.SCREEN_WIDTH / 640 << std::endl;
+                    std::cout << x << " " << mSDLHandler.SCREEN_WIDTH / 640 << std::endl;
                 }
             }
             
-            if (m_handler.m_event.type == SDL_MOUSEBUTTONUP && clickedOn != nullptr)
+            if (mSDLHandler.mEvent.type == SDL_MOUSEBUTTONUP && clickedOn != nullptr)
             {
                 quit = true;
             }
         }
     }
 
-    m_field[xEnd][yEnd] = clickedOn;
-    m_field[xStart][yStart] = nullptr;
-    m_handler.undoPieceRender(xStart, yStart);
-    m_handler.renderBackground();
+    mField[xEnd][yEnd] = clickedOn;
+    mField[xStart][yStart] = nullptr;
+    mSDLHandler.undoPieceRender(xStart, yStart);
+    mSDLHandler.renderBackground();
     
     for (int i = 0; i < 8; i++)
     {
         for (int j = 0; j < 8; j++)
         {
-            if (m_field[i][j] != nullptr)
+            if (mField[i][j] != nullptr)
             {
-                m_field[i][j]->render();
+                mField[i][j]->render();
             }
         }
     }
@@ -310,33 +312,33 @@ void Game::castles(int xStart, int yStart, int xEnd, int yEnd)
 {
     if (xEnd == 0)
     {
-        m_field[2][yEnd] = m_field[4][yEnd];
-        m_field[3][yEnd] = m_field[0][yEnd];
-        m_field[2][yEnd]->setHasMoved();
-        m_field[3][yEnd]->setHasMoved();
-        m_field[2][yEnd]->setPosition({2, yEnd});
-        m_field[3][yEnd]->setPosition({3, yEnd});
-        m_field[4][yEnd] = nullptr;
-        m_field[0][yEnd] = nullptr;
-        m_handler.undoPieceRender(4, yEnd);
-        m_handler.undoPieceRender(0, yEnd);
-        m_field[2][yEnd]->render();
-        m_field[3][yEnd]->render();
+        mField[2][yEnd] = mField[4][yEnd];
+        mField[3][yEnd] = mField[0][yEnd];
+        mField[2][yEnd]->setHasMoved();
+        mField[3][yEnd]->setHasMoved();
+        mField[2][yEnd]->setPosition({2, yEnd});
+        mField[3][yEnd]->setPosition({3, yEnd});
+        mField[4][yEnd] = nullptr;
+        mField[0][yEnd] = nullptr;
+        mSDLHandler.undoPieceRender(4, yEnd);
+        mSDLHandler.undoPieceRender(0, yEnd);
+        mField[2][yEnd]->render();
+        mField[3][yEnd]->render();
     }
     else
     {
-        m_field[6][yEnd] = m_field[4][yEnd];
-        m_field[5][yEnd] = m_field[7][yEnd];
-        m_field[6][yEnd]->setHasMoved();
-        m_field[5][yEnd]->setHasMoved();
-        m_field[6][yEnd]->setPosition({6, yEnd});
-        m_field[5][yEnd]->setPosition({5, yEnd});
-        m_field[4][yEnd] = nullptr;
-        m_field[7][yEnd] = nullptr;
-        m_handler.undoPieceRender(4, yEnd);
-        m_handler.undoPieceRender(7, yEnd);
-        m_field[6][yEnd]->render();
-        m_field[5][yEnd]->render();
+        mField[6][yEnd] = mField[4][yEnd];
+        mField[5][yEnd] = mField[7][yEnd];
+        mField[6][yEnd]->setHasMoved();
+        mField[5][yEnd]->setHasMoved();
+        mField[6][yEnd]->setPosition({6, yEnd});
+        mField[5][yEnd]->setPosition({5, yEnd});
+        mField[4][yEnd] = nullptr;
+        mField[7][yEnd] = nullptr;
+        mSDLHandler.undoPieceRender(4, yEnd);
+        mSDLHandler.undoPieceRender(7, yEnd);
+        mField[6][yEnd]->render();
+        mField[5][yEnd]->render();
     }
 }
 
@@ -345,22 +347,22 @@ void Game::gameState()
     bool lost = true;
     King* pivot = kb1;
 
-    if (m_turn == Piece::BLACK)
+    if (mTurn == Piece::BLACK)
     {
         pivot = kl1;
     }
 
-    pivot->setCheck(m_field, kl1->getPos().x, kl1->getPos().y);
+    pivot->setCheck(mField, kl1->getPos().x, kl1->getPos().y);
     for (int i = 0; i < 8; i++)
     {
         for (int j = 0; j < 8; j++)
         {
-            if (m_field[i][j] != nullptr)
+            if (mField[i][j] != nullptr)
             {
-                if (m_field[i][j]->getTeam() != m_turn)
+                if (mField[i][j]->getTeam() != mTurn)
                 {
-                    m_field[i][j]->calcPossibleMoves(m_field, true);
-                    if (!m_field[i][j]->getPossibleMoves().empty())
+                    mField[i][j]->calcPossibleMoves(mField, true);
+                    if (!mField[i][j]->getPossibleMoves().empty())
                     {
                         lost = false;
                     }
@@ -371,7 +373,7 @@ void Game::gameState()
 
     if (pivot->getCheck() && lost)
     {
-        if (m_turn == Piece::BLACK)
+        if (mTurn == Piece::BLACK)
         {
             std::cout << "Black wins!";
         }
@@ -382,7 +384,7 @@ void Game::gameState()
     }
     else if (lost)
     {
-        if (m_turn == Piece::BLACK)
+        if (mTurn == Piece::BLACK)
         {
             std::cout << "Remis!";
         }
@@ -391,13 +393,13 @@ void Game::gameState()
             std::cout << "Remis!";
         }
     }
-    if (m_turn == Piece::BLACK)
+    if (mTurn == Piece::BLACK)
     {
-        m_turn = Piece::WHITE;
+        mTurn = Piece::WHITE;
     }
     else
     {
-        m_turn = Piece::BLACK;
+        mTurn = Piece::BLACK;
     }
 
 }
@@ -409,11 +411,11 @@ void Game::disableEnPassant()
     {
         for (int j = 0; j < 8; j++)
         {
-            if (m_field[i][j] != nullptr)
+            if (mField[i][j] != nullptr)
             {
-                if (m_field[i][j]->getType() == Piece::PAWN)
+                if (mField[i][j]->getType() == Piece::PAWN)
                 {
-                    Pawn* pwn = static_cast<Pawn*>(m_field[i][j]);
+                    Pawn* pwn = static_cast<Pawn*>(mField[i][j]);
                     pwn->setEnPassant(std::pair<bool, int>(false, 0));
                 }
             }
@@ -424,31 +426,31 @@ void Game::disableEnPassant()
 
 void Game::renderPossibleMoves(Piece* piece)
 {
-    piece->calcPossibleMoves(m_field, true);
+    piece->calcPossibleMoves(mField, true);
     std::vector<Piece::SPieceMovement> possible = piece->getPossibleMoves();
     SDL_Rect rectangle;
     for (const auto& value : possible) {
         if ((value.x % 2 == 0 && value.y % 2 == 1) || (value.x % 2 == 1 && value.y % 2 == 0))
         {
-            SDL_SetRenderDrawColor(m_handler.m_renderer, 0, 134, 139, 255);
+            SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 0, 134, 139, 255);
         }
         else
         {
-            SDL_SetRenderDrawColor(m_handler.m_renderer, 164, 211, 238, 255);
+            SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 164, 211, 238, 255);
         }
-        rectangle = { value.x * m_handler.SCREEN_WIDTH / 8,
-                      value.y * m_handler.SCREEN_HEIGHT / 8,
-                      m_handler.SCREEN_WIDTH / 8,
-                      m_handler.SCREEN_HEIGHT / 8 };
-        SDL_RenderFillRect(m_handler.m_renderer, &rectangle);
+        rectangle = { value.x * mSDLHandler.SCREEN_WIDTH / 8,
+                      value.y * mSDLHandler.SCREEN_HEIGHT / 8,
+                      mSDLHandler.SCREEN_WIDTH / 8,
+                      mSDLHandler.SCREEN_HEIGHT / 8 };
+        SDL_RenderFillRect(mSDLHandler.mRenderer, &rectangle);
 
         for (int i = 0; i < 8; i++)
         {
             for (int j = 0; j < 8; j++)
             {
-                if (m_field[i][j] != nullptr)
+                if (mField[i][j] != nullptr)
                 {
-                    m_field[i][j]->render();
+                    mField[i][j]->render();
                 }
             }
         }
@@ -461,25 +463,25 @@ void Game::undoRenderPossibleMoves(Piece* piece)
     for (const auto& value : possible) {
         if ((value.x % 2 == 0 && value.y % 2 == 1) || (value.x % 2 == 1 && value.y % 2 == 0))
         {
-            SDL_SetRenderDrawColor(m_handler.m_renderer, 155, 103, 60, 255);
+            SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 155, 103, 60, 255);
         }
         else
         {
-            SDL_SetRenderDrawColor(m_handler.m_renderer, 255, 255, 255, 255);
+            SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 255, 255, 255, 255);
         }
-        SDL_Rect rectangle = { value.x * m_handler.SCREEN_WIDTH / 8,
-                                  value.y * m_handler.SCREEN_HEIGHT / 8,
-                                  m_handler.SCREEN_WIDTH / 8,
-                                  m_handler.SCREEN_HEIGHT / 8 };
-        SDL_RenderFillRect(m_handler.m_renderer, &rectangle);
+        SDL_Rect rectangle = { value.x * mSDLHandler.SCREEN_WIDTH / 8,
+                                  value.y * mSDLHandler.SCREEN_HEIGHT / 8,
+                                  mSDLHandler.SCREEN_WIDTH / 8,
+                                  mSDLHandler.SCREEN_HEIGHT / 8 };
+        SDL_RenderFillRect(mSDLHandler.mRenderer, &rectangle);
 
         for (int i = 0; i < 8; i++)
         {
             for (int j = 0; j < 8; j++)
             {
-                if (m_field[i][j] != nullptr)
+                if (mField[i][j] != nullptr)
                 {
-                    m_field[i][j]->render();
+                    mField[i][j]->render();
                 }
             }
         }
@@ -492,9 +494,9 @@ void Game::calcAllMoves()
     {
         for (int j = 0; j < 8; j++)
         {
-            if (m_field[i][j] != nullptr)
+            if (mField[i][j] != nullptr)
             {
-                m_field[i][j]->calcPossibleMoves(m_field, true);
+                mField[i][j]->calcPossibleMoves(mField, true);
             }
         }
     }

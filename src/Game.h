@@ -24,7 +24,7 @@ public:
     void move(Piece* piece, std::tuple<int, int, Piece::MoveType> move);
 
     // returns m_turn
-    Piece::Team getTurn() { return m_turn; };
+    Piece::Team getTurn() { return mTurn; };
 
     // true, if the move is valid  ;  false if not
     bool isValidMove(int x, int y, Piece* piece);
@@ -39,9 +39,6 @@ public:
     void undoRenderPossibleMoves(Piece* piece);
 
 private: 
-	// 2D Field array, every Position has got a PIece::Team and a piece
-	Piece* m_field[8][8];
-
     // disables enPassant for every Piece
     void disableEnPassant();
 
@@ -57,20 +54,20 @@ private:
     // castles move
     void castles(int xStart, int yStart, int xEnd, int yEnd);
 
-    // Background filename
-    std::string m_backgroundFilename;
-
-    // Decides whether if its black or whites turn
-    Piece::Team m_turn;
-
-    // handler
-    SDL_Handler& m_handler;
-
-    // if true, disable en Passant! if false, dont
-    bool m_checkEnPassant;
-
     // checks current game state, determines winner or remis
     void gameState();
+
+    // handler
+    SDL_Handler& mSDLHandler;
+
+    // Decides whether if its black or whites turn
+    Piece::Team mTurn;
+
+    // if true, disable en Passant! if false, dont
+    bool mCheckEnPassant;
+
+	// 2D Field array, every Position has got a Piece::Team and a piece
+	Piece* mField[8][8];
 
     // every single piece
     Pawn* pl1;
