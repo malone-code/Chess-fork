@@ -11,6 +11,7 @@ CMakeFiles/*
 src/CMakeFiles/*
 Makefile
 src/Makefile
+src/Chess
 
 # User-specific files
 *.rsuser
