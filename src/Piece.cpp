@@ -33,7 +33,7 @@ void Piece::render()
 	mHandler.drawRectangle(src, dest, mTexture);
 }
 
-void Piece::printPieceStr()
+void Piece::printPieceStr() const
 {
 	std::cout << getTeamStr(mTeam) << " " << getPieceTypeStr(mType) << std::endl;
 }
@@ -100,7 +100,7 @@ King* Piece::getOwnKing(Piece* field[8][8])
 	return nullptr;
 }
 
-std::string Piece::getTeamStr(Team team) {
+std::string Piece::getTeamStr(Team team) const {
 	switch(team) {
 		case WHITE:
 			return "WHITE";
@@ -110,7 +110,7 @@ std::string Piece::getTeamStr(Team team) {
 	return "Unknown Team";
 }
 
-std::string Piece::getPieceTypeStr(PieceType pieceType) {
+std::string Piece::getPieceTypeStr(PieceType pieceType) const {
 	switch(pieceType) {
 		case PAWN:
 			return "PAWN";

@@ -37,16 +37,16 @@ public:
 
 	~Piece();
 
-	std::vector<SPieceMovement> getPossibleMoves() { return mPossibleMoves; }
-	Team getTeam() { return mTeam; }
+	std::vector<SPieceMovement> getPossibleMoves() const { return mPossibleMoves; }
+	Team getTeam() const { return mTeam; }
 	void setPosition(SPosition newPos) { mPosition = newPos; }
-	const SPosition& getPos() { return mPosition; }
-	PieceType getType() { return mType; }
+	const SPosition& getPos() const { return mPosition; }
+	PieceType getType() const { return mType; }
 	bool hasMoved() const { return mHasMoved; }
 	void setHasMoved() { mHasMoved = true; }
 
 	void render();
-	void printPieceStr();
+	void printPieceStr() const;
 
 	virtual void calcPossibleMoves(Piece* field[8][8], bool checkCheck) = 0;
 
@@ -60,8 +60,8 @@ protected:
 	std::vector<SPieceMovement> pushMove(std::vector<SPieceMovement> moveList, SPieceMovement move, King* king, Piece* field[8][8], bool checkCheck);
 
 	King* getOwnKing(Piece* field[8][8]);
-	std::string getTeamStr(Team team);
-	std::string getPieceTypeStr(PieceType pieceType);
+	std::string getTeamStr(Team team) const;
+	std::string getPieceTypeStr(PieceType pieceType) const;
 
 	Team mTeam;
 	PieceType mType;
