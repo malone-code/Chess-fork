@@ -86,7 +86,7 @@ King* Piece::getOwnKing(Piece* field[8][8])
 void Piece::render()
 {
 	SDL_Rect src = {0, 0, 150, 150};
-	SDL_Rect dest = { m_handler.SCREEN_WIDTH / 8 * m_pos.x - 2,
+	SDL_Rect dest = { m_handler.SCREEN_WIDTH / 8 * m_pos.x,
 					  m_handler.SCREEN_HEIGHT / 8 * m_pos.y,
 					  m_handler.SCREEN_WIDTH / 8,
 					  m_handler.SCREEN_HEIGHT / 8 };
