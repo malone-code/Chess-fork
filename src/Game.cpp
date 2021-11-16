@@ -1,5 +1,6 @@
 #include "Game.h"
 
+#include "Constants.h"
 #include "Resources.h"
 
 #include <iostream>
@@ -206,83 +207,76 @@ void Game::exchange(int xStart, int yStart, int xEnd, int yEnd)
         text_knight = mSDLHandler.loadImage(Resources::PieceSprites::kBlackKnight);
         text_bishop = mSDLHandler.loadImage(Resources::PieceSprites::kBlackBishop);
         text_queen = mSDLHandler.loadImage(Resources::PieceSprites::kBlackQueen);
-        y_draw = 3 * mSDLHandler.SCREEN_HEIGHT / 4;
+        y_draw = 3 * Constants::SCREEN_HEIGHT / 4;
         team = Piece::BLACK;
     }
 
     SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 155, 103, 60, 255);
     SDL_Rect rectangle = {0,
                           y_draw,
-                          mSDLHandler.SCREEN_WIDTH / 4,
-                          mSDLHandler.SCREEN_HEIGHT / 4 };
+                          Constants::SCREEN_WIDTH / 4,
+                          Constants::SCREEN_HEIGHT / 4 };
     SDL_RenderFillRect(mSDLHandler.mRenderer, &rectangle);
-    SDL_Rect src = { 0, 0, 150, 150 };
+    SDL_Rect src = { 0, 0, Constants::PIECE_SPRITE_WIDTH, Constants::PIECE_SPRITE_HEIGHT };
     mSDLHandler.drawRectangle(src, rectangle, text_rook);
 
     SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 255, 255, 255, 255);
-    rectangle.x = mSDLHandler.SCREEN_WIDTH / 4;
+    rectangle.x = Constants::SCREEN_WIDTH / 4;
     SDL_RenderFillRect(mSDLHandler.mRenderer, &rectangle);
     mSDLHandler.drawRectangle(src, rectangle, text_knight);
 
     SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 155, 103, 60, 255);
-    rectangle.x = 2 * mSDLHandler.SCREEN_WIDTH / 4;
+    rectangle.x = 2 * Constants::SCREEN_WIDTH / 4;
     SDL_RenderFillRect(mSDLHandler.mRenderer, &rectangle);
     mSDLHandler.drawRectangle(src, rectangle, text_bishop);
 
     SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 255, 255, 255, 255);
-    rectangle.x = 3 * mSDLHandler.SCREEN_WIDTH / 4;
+    rectangle.x = 3 * Constants::SCREEN_WIDTH / 4;
     SDL_RenderFillRect(mSDLHandler.mRenderer, &rectangle);
     mSDLHandler.drawRectangle(src, rectangle, text_queen);
 
-    bool quit = false;
+    bool done = false;
     int x = -1;
     int y = -1;
 
     Piece* clickedOn = nullptr;
 
-    //TODO std::cout << m_handler;
-    
-    while (quit == false)
+    while (!done && SDL_WaitEvent(&mSDLHandler.mEvent))
     {
-        while (SDL_PollEvent(&mSDLHandler.mEvent))
-        {
-            if (mSDLHandler.mEvent.type == SDL_QUIT)
-            {
-                quit = true;
-            }
+		if (mSDLHandler.mEvent.type == SDL_QUIT)
+		{
+			done = true;
+		}
+		else if (mSDLHandler.mEvent.type == SDL_MOUSEBUTTONDOWN)
+		{
+			x = mSDLHandler.mEvent.button.x / 160;
+			y = mSDLHandler.mEvent.button.y / 160;
 
-            if (mSDLHandler.mEvent.type == SDL_MOUSEBUTTONDOWN)
-            {
-                x = mSDLHandler.mEvent.button.x / 160;
-                y = mSDLHandler.mEvent.button.y / 160;
-                
-                if (y >= y_draw / 160 && y < y_draw / 160 + 1)
-                {
-                    if (x < mSDLHandler.SCREEN_WIDTH / 640)
-                    {
-                        clickedOn = new Rook(team, {xEnd, yEnd}, mSDLHandler);
-                    }
-                    else if (x < 2 * mSDLHandler.SCREEN_WIDTH / 640)
-                    {
-                        clickedOn = new Knight(team, {xEnd, yEnd}, mSDLHandler);
-                    }
-                    else if (x < 3 * mSDLHandler.SCREEN_WIDTH / 640)
-                    {
-                        clickedOn = new Bishop(team, {xEnd, yEnd}, mSDLHandler);
-                    }
-                    else if (x <= 4 * mSDLHandler.SCREEN_WIDTH / 640)
-                    {
-                        clickedOn = new Queen(team, {xEnd, yEnd}, mSDLHandler);
-                    }
-                    std::cout << x << " " << mSDLHandler.SCREEN_WIDTH / 640 << std::endl;
-                }
-            }
-            
-            if (mSDLHandler.mEvent.type == SDL_MOUSEBUTTONUP && clickedOn != nullptr)
-            {
-                quit = true;
-            }
-        }
+			if (y >= y_draw / 160 && y < y_draw / 160 + 1)
+			{
+				if (x < Constants::SCREEN_WIDTH / 640)
+				{
+					clickedOn = new Rook(team, {xEnd, yEnd}, mSDLHandler);
+				}
+				else if (x < 2 * Constants::SCREEN_WIDTH / 640)
+				{
+					clickedOn = new Knight(team, {xEnd, yEnd}, mSDLHandler);
+				}
+				else if (x < 3 * Constants::SCREEN_WIDTH / 640)
+				{
+					clickedOn = new Bishop(team, {xEnd, yEnd}, mSDLHandler);
+				}
+				else if (x <= 4 * Constants::SCREEN_WIDTH / 640)
+				{
+					clickedOn = new Queen(team, {xEnd, yEnd}, mSDLHandler);
+				}
+				std::cout << x << " " << Constants::SCREEN_WIDTH / 640 << std::endl;
+			}
+		}
+		else if (mSDLHandler.mEvent.type == SDL_MOUSEBUTTONUP && clickedOn != nullptr)
+		{
+			done = true;
+		}
     }
 
     mField[xEnd][yEnd] = clickedOn;
@@ -439,10 +433,10 @@ void Game::renderPossibleMoves(Piece* piece)
             SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 164, 211, 238, 255);
         }
         SDL_Rect rectangle = {
-			value.x * mSDLHandler.SCREEN_WIDTH / 8,
-			value.y * mSDLHandler.SCREEN_HEIGHT / 8,
-			mSDLHandler.SCREEN_WIDTH / 8,
-			mSDLHandler.SCREEN_HEIGHT / 8
+			value.x * Constants::SCREEN_WIDTH / 8,
+			value.y * Constants::SCREEN_HEIGHT / 8,
+			Constants::SCREEN_WIDTH / 8,
+			Constants::SCREEN_HEIGHT / 8
 		};
         SDL_RenderFillRect(mSDLHandler.mRenderer, &rectangle);
 
@@ -471,10 +465,10 @@ void Game::undoRenderPossibleMoves(Piece* piece)
         {
             SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 255, 255, 255, 255);
         }
-        SDL_Rect rectangle = { value.x * mSDLHandler.SCREEN_WIDTH / 8,
-                                  value.y * mSDLHandler.SCREEN_HEIGHT / 8,
-                                  mSDLHandler.SCREEN_WIDTH / 8,
-                                  mSDLHandler.SCREEN_HEIGHT / 8 };
+        SDL_Rect rectangle = { value.x * Constants::SCREEN_WIDTH / 8,
+                                  value.y * Constants::SCREEN_HEIGHT / 8,
+                                  Constants::SCREEN_WIDTH / 8,
+                                  Constants::SCREEN_HEIGHT / 8 };
         SDL_RenderFillRect(mSDLHandler.mRenderer, &rectangle);
 
         for (int i = 0; i < 8; i++)

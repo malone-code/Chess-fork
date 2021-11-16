@@ -1,5 +1,7 @@
 #include "SDL_Handler.h"
 
+#include "Constants.h"
+
 #include <iostream>
 
 SDL_Handler::SDL_Handler()
@@ -50,10 +52,12 @@ void SDL_Handler::renderBackground()
 				SDL_SetRenderDrawColor(mRenderer, 155, 103, 60, 255);
 			}
 			white = !white;
-			SDL_Rect rectangle = { i * SCREEN_WIDTH / 8,
-								  j * SCREEN_HEIGHT / 8,
-								  SCREEN_WIDTH / 8,
-								  SCREEN_HEIGHT / 8 };
+			SDL_Rect rectangle = {
+				i * Constants::SCREEN_WIDTH / 8,
+				j * Constants::SCREEN_HEIGHT / 8,
+				Constants::SCREEN_WIDTH / 8,
+				Constants::SCREEN_HEIGHT / 8
+			};
 			SDL_RenderFillRect(mRenderer, &rectangle);
 		}
 		white = !white;
@@ -71,10 +75,10 @@ void SDL_Handler::undoPieceRender(int x, int y)
 		SDL_SetRenderDrawColor(mRenderer, 155, 103, 60, 255);
 	}
 	SDL_Rect rectangle = {
-		x * SCREEN_WIDTH / 8,
-		y * SCREEN_HEIGHT / 8,
-		SCREEN_WIDTH / 8,
-		SCREEN_HEIGHT / 8
+		x * Constants::SCREEN_WIDTH / 8,
+		y * Constants::SCREEN_HEIGHT / 8,
+		Constants::SCREEN_WIDTH / 8,
+		Constants::SCREEN_HEIGHT / 8
 	};
 	SDL_RenderFillRect(mRenderer, &rectangle);
 }
@@ -111,8 +115,8 @@ bool SDL_Handler::init()
 	if (SDL_Init(SDL_INIT_VIDEO) >= 0)
 	{
 		//Create window
-		mWindow = SDL_CreateWindow("Chess", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-		if (mWindow != NULL)
+		mWindow = SDL_CreateWindow("Chess", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Constants::SCREEN_WIDTH, Constants::SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+		if (mWindow)
 		{
 			mRenderer = SDL_CreateRenderer(mWindow, -1, 0);
 		}

@@ -1,6 +1,8 @@
 #include "Piece.h"
 #include "King.h"
 
+#include "Constants.h"
+
 #include <string>
 #include <iostream>
 
@@ -23,12 +25,12 @@ Piece::~Piece()
 
 void Piece::render()
 {
-	SDL_Rect src = {0, 0, 150, 150};
+	SDL_Rect src = { 0, 0, Constants::PIECE_SPRITE_WIDTH, Constants::PIECE_SPRITE_HEIGHT };
 	SDL_Rect dest = {
-		mHandler.SCREEN_WIDTH / 8 * mPosition.x,
-		mHandler.SCREEN_HEIGHT / 8 * mPosition.y,
-		mHandler.SCREEN_WIDTH / 8,
-		mHandler.SCREEN_HEIGHT / 8
+		Constants::SCREEN_WIDTH / 8 * mPosition.x,
+		Constants::SCREEN_HEIGHT / 8 * mPosition.y,
+		Constants::SCREEN_WIDTH / 8,
+		Constants::SCREEN_HEIGHT / 8
 	};
 	mHandler.drawRectangle(src, dest, mTexture);
 }
@@ -101,13 +103,7 @@ King* Piece::getOwnKing(Piece* field[8][8])
 }
 
 std::string Piece::getTeamStr(Team team) const {
-	switch(team) {
-		case WHITE:
-			return "WHITE";
-		case BLACK:
-			return "BLACK";
-	}
-	return "Unknown Team";
+	return (team == WHITE) ? "WHITE" : "BLACK";
 }
 
 std::string Piece::getPieceTypeStr(PieceType pieceType) const {
