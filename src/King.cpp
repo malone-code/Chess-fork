@@ -14,7 +14,7 @@ King::King(Team team, const SPosition& pos, SDL_Handler& handler)
 	std::string filename = (team == WHITE) ?
 		Resources::PieceSprites::kWhiteKing :
 		Resources::PieceSprites::kBlackKing;
-	m_texture = handler.loadImage(filename);
+	mTexture = handler.loadImage(filename);
 
 	render();
 }
@@ -29,14 +29,14 @@ void King::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 	{
 		for (int dy = -1; dy <= 1; dy++)
 		{
-			if (m_pos.x + dx >= 0 && m_pos.x + dx <= 7 && m_pos.y + dy >= 0 && m_pos.y + dy <= 7)
+			if (mPosition.x + dx >= 0 && mPosition.x + dx <= 7 && mPosition.y + dy >= 0 && mPosition.y + dy <= 7)
 			{
-				if (field[m_pos.x + dx][m_pos.y + dy] != nullptr)
+				if (field[mPosition.x + dx][mPosition.y + dy] != nullptr)
 				{
-					if (field[m_pos.x + dx][m_pos.y + dy]->getTeam() != m_team)
+					if (field[mPosition.x + dx][mPosition.y + dy]->getTeam() != mTeam)
 					{
 						moves = pushMove(moves,
-							{m_pos.x + dx, m_pos.y + dy, Piece::NORMAL},
+							{mPosition.x + dx, mPosition.y + dy, Piece::NORMAL},
 							getOwnKing(field),
 							field,
 							checkCheck);
@@ -45,7 +45,7 @@ void King::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 				else
 				{
 					moves = pushMove(moves,
-						 {m_pos.x + dx, m_pos.y + dy, Piece::NORMAL},
+						 {mPosition.x + dx, mPosition.y + dy, Piece::NORMAL},
 						 getOwnKing(field),
 						 field,
 						 checkCheck);
@@ -63,7 +63,7 @@ void King::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 				castles = true;
 				if (field[i][j] != nullptr)
 				{
-					if (field[i][j]->getTeam() == m_team && field[i][j]->getType() == ROOK && !field[i][j]->hasMoved())
+					if (field[i][j]->getTeam() == mTeam && field[i][j]->getType() == ROOK && !field[i][j]->hasMoved())
 					{
 						int a, b, c;
 						if (i == 0)
@@ -86,7 +86,7 @@ void King::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 								{
 									if (field[k][l] != nullptr)
 									{
-										if (field[k][l]->getTeam() != m_team)
+										if (field[k][l]->getTeam() != mTeam)
 										{
 											std::vector<SPieceMovement> notPossible = field[k][l]->getPossibleMoves();
 											for (const auto& value : notPossible)
@@ -124,7 +124,7 @@ void King::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 			}
 		}
 	}
-	m_possibleMoves = moves;
+	mPossibleMoves = moves;
 }
 
 void King::setCheck(Piece* field[8][8], int x, int y)
@@ -137,7 +137,7 @@ void King::setCheck(Piece* field[8][8], int x, int y)
 		{
 			if (field[i][j] != nullptr)
 			{
-				if (field[i][j]->getTeam() != m_team)
+				if (field[i][j]->getTeam() != mTeam)
 				{
 					if (field[i][j]->getType() == KING)
 					{

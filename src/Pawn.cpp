@@ -11,7 +11,7 @@ Pawn::Pawn(Team team, const SPosition& pos, SDL_Handler& handler)
 	std::string filename = (team == WHITE) ?
 		Resources::PieceSprites::kWhitePawn :
 		Resources::PieceSprites::kBlackPawn;
-	m_texture = handler.loadImage(filename);
+	mTexture = handler.loadImage(filename);
 
 	if (team == BLACK)
 	{
@@ -29,12 +29,12 @@ void Pawn::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 {
 	std::vector<SPieceMovement> moves;
 
-	if (m_pos.y + m_dy == 0 || m_pos.y + m_dy == 7)
+	if (mPosition.y + m_dy == 0 || mPosition.y + m_dy == 7)
 	{
-		if (field[m_pos.x][m_pos.y + m_dy] == nullptr)
+		if (field[mPosition.x][mPosition.y + m_dy] == nullptr)
 		{
 			moves = pushMove(moves,
-					{m_pos.x, m_pos.y + m_dy, Piece::NEWPIECE},
+					{mPosition.x, mPosition.y + m_dy, Piece::NEWPIECE},
 					getOwnKing(field),
 					field,
 					checkCheck);
@@ -42,38 +42,38 @@ void Pawn::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 	}
 	else
 	{
-		if (field[m_pos.x][m_pos.y + m_dy] == nullptr)
+		if (field[mPosition.x][mPosition.y + m_dy] == nullptr)
 		{
 			moves = pushMove(moves,
-					{m_pos.x, m_pos.y + m_dy, Piece::NORMAL},
+					{mPosition.x, mPosition.y + m_dy, Piece::NORMAL},
 					getOwnKing(field),
 					field,
 					checkCheck);
 		}
 	}
 
-	if ((m_pos.y + 2 * m_dy >= 0) && (m_pos.y + 2 * m_dy <= 7))
+	if ((mPosition.y + 2 * m_dy >= 0) && (mPosition.y + 2 * m_dy <= 7))
 	{
-		if (field[m_pos.x][m_pos.y + 2 * m_dy] == nullptr && !hasMoved())
+		if (field[mPosition.x][mPosition.y + 2 * m_dy] == nullptr && !hasMoved())
 		{
 			moves = pushMove(moves,
-				{m_pos.x, m_pos.y + 2 * m_dy, Piece::NORMAL},
+				{mPosition.x, mPosition.y + 2 * m_dy, Piece::NORMAL},
 				getOwnKing(field),
 				field,
 				checkCheck);
 		}
 	}
 
-	if (m_pos.x + 1 <= 7)
+	if (mPosition.x + 1 <= 7)
 	{
-		if (field[m_pos.x + 1][m_pos.y + m_dy] != nullptr)
+		if (field[mPosition.x + 1][mPosition.y + m_dy] != nullptr)
 		{
-			if (field[m_pos.x + 1][m_pos.y + m_dy]->getTeam() != m_team)
+			if (field[mPosition.x + 1][mPosition.y + m_dy]->getTeam() != mTeam)
 			{
-				if (m_pos.y + m_dy == 0 || m_pos.y + m_dy == 7)
+				if (mPosition.y + m_dy == 0 || mPosition.y + m_dy == 7)
 				{
 					moves = pushMove(moves,
-						{m_pos.x + 1, m_pos.y + m_dy, Piece::NEWPIECE},
+						{mPosition.x + 1, mPosition.y + m_dy, Piece::NEWPIECE},
 						getOwnKing(field),
 						field,
 						checkCheck);
@@ -81,7 +81,7 @@ void Pawn::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 				else
 				{
 					moves = pushMove(moves,
-						{m_pos.x + 1, m_pos.y + m_dy, Piece::NORMAL},
+						{mPosition.x + 1, mPosition.y + m_dy, Piece::NORMAL},
 						getOwnKing(field),
 						field,
 						checkCheck);
@@ -89,16 +89,16 @@ void Pawn::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 			}
 		}
 	}
-	if (m_pos.x - 1 >= 0)
+	if (mPosition.x - 1 >= 0)
 	{
-		if (field[m_pos.x - 1][m_pos.y + m_dy] != nullptr)
+		if (field[mPosition.x - 1][mPosition.y + m_dy] != nullptr)
 		{
-			if (field[m_pos.x - 1][m_pos.y + m_dy]->getTeam() != m_team)
+			if (field[mPosition.x - 1][mPosition.y + m_dy]->getTeam() != mTeam)
 			{
-				if (m_pos.y + m_dy == 0 || m_pos.y + m_dy == 7)
+				if (mPosition.y + m_dy == 0 || mPosition.y + m_dy == 7)
 				{
 					moves = pushMove(moves,
-						{m_pos.x - 1, m_pos.y + m_dy, Piece::NEWPIECE},
+						{mPosition.x - 1, mPosition.y + m_dy, Piece::NEWPIECE},
 						getOwnKing(field),
 						field,
 						checkCheck);
@@ -106,7 +106,7 @@ void Pawn::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 				else
 				{
 					moves = pushMove(moves,
-						{m_pos.x - 1, m_pos.y + m_dy, Piece::NORMAL},
+						{mPosition.x - 1, mPosition.y + m_dy, Piece::NORMAL},
 						getOwnKing(field),
 						field,
 						checkCheck);
@@ -118,7 +118,7 @@ void Pawn::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 	if (m_enPassant == std::pair<bool, int>(true, -1))
 	{
 		moves = pushMove(moves,
-			{m_pos.x + 1, m_pos.y + m_dy, Piece::ENPASSANT},
+			{mPosition.x + 1, mPosition.y + m_dy, Piece::ENPASSANT},
 			getOwnKing(field),
 			field,
 			checkCheck);
@@ -126,12 +126,12 @@ void Pawn::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 	if (m_enPassant == std::pair<bool, int>(true, 1))
 	{
 		moves = pushMove(moves,
-			{m_pos.x - 1, m_pos.y + m_dy, Piece::ENPASSANT},
+			{mPosition.x - 1, mPosition.y + m_dy, Piece::ENPASSANT},
 			getOwnKing(field),
 			field,
 			checkCheck);
 	}
-	m_possibleMoves = moves;
+	mPossibleMoves = moves;
 }
 
 

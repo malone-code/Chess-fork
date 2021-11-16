@@ -5,20 +5,37 @@
 #include <iostream>
 
 Piece::Piece(Team team, PieceType type, const SPosition& pos, SDL_Handler& handler)
-	: m_team(team), m_type(type), m_pos(pos), m_handler(handler), m_texture(NULL), m_hasMoved(false)
+	: mTeam(team), mType(type), mPosition(pos), mHandler(handler), mTexture(NULL), mHasMoved(false)
 {
 }
 
 Piece::Piece(const Piece& piece)
-	: m_team(piece.m_team), m_type(piece.m_type), m_pos(piece.m_pos), m_handler(piece.m_handler), m_texture(NULL), m_hasMoved(false)
+	: mTeam(piece.mTeam), mType(piece.mType), mPosition(piece.mPosition), mHandler(piece.mHandler), mTexture(NULL), mHasMoved(false)
 {
 }
 
 Piece::~Piece()
 {
-	SDL_DestroyTexture(m_texture);
+	SDL_DestroyTexture(mTexture);
 
-	m_handler.undoPieceRender(m_pos.x, m_pos.y);
+	mHandler.undoPieceRender(mPosition.x, mPosition.y);
+}
+
+void Piece::render()
+{
+	SDL_Rect src = {0, 0, 150, 150};
+	SDL_Rect dest = {
+		mHandler.SCREEN_WIDTH / 8 * mPosition.x,
+		mHandler.SCREEN_HEIGHT / 8 * mPosition.y,
+		mHandler.SCREEN_WIDTH / 8,
+		mHandler.SCREEN_HEIGHT / 8
+	};
+	mHandler.drawRectangle(src, dest, mTexture);
+}
+
+void Piece::printPieceStr()
+{
+	std::cout << getTeamStr(mTeam) << " " << getPieceTypeStr(mType) << std::endl;
 }
 
 std::vector<Piece::SPieceMovement> Piece::pushMove(std::vector<Piece::SPieceMovement> moveList, Piece::SPieceMovement move, King* king, Piece* field[8][8], bool checkCheck)
@@ -40,8 +57,8 @@ std::vector<Piece::SPieceMovement> Piece::pushMove(std::vector<Piece::SPieceMove
 			field[move.x][move.y] = nullptr;
 		}
 
-		std::swap(field[move.x][move.y], field[m_pos.x][m_pos.y]);
-		if (m_type == KING)
+		std::swap(field[move.x][move.y], field[mPosition.x][mPosition.y]);
+		if (mType == KING)
 		{
 			king->setCheck(field, move.x, move.y);
 		}
@@ -49,7 +66,7 @@ std::vector<Piece::SPieceMovement> Piece::pushMove(std::vector<Piece::SPieceMove
 		{
 			king->setCheck(field, king->getPos().x, king->getPos().y);
 		}
-		std::swap(field[move.x][move.y], field[m_pos.x][m_pos.y]);
+		std::swap(field[move.x][move.y], field[mPosition.x][mPosition.y]);
 
 		if (enemyPlace)
 		{
@@ -66,13 +83,13 @@ std::vector<Piece::SPieceMovement> Piece::pushMove(std::vector<Piece::SPieceMove
 
 King* Piece::getOwnKing(Piece* field[8][8])
 {
-	for  (int i = 0; i < 8; i++)
+	for  (int i = 0; i < 8; ++i)
 	{
-		for (int j = 0; j < 8; j++)
+		for (int j = 0; j < 8; ++j)
 		{
 			if (field[i][j] != nullptr)
 			{
-				if (field[i][j]->getTeam() == m_team && field[i][j]->getType() == Piece::KING)
+				if (field[i][j]->getTeam() == mTeam && field[i][j]->getType() == Piece::KING)
 				{
 					King* ret = static_cast<King*>(field[i][j]);
 					return ret;
@@ -81,21 +98,6 @@ King* Piece::getOwnKing(Piece* field[8][8])
 		}
 	}
 	return nullptr;
-}
-
-void Piece::render()
-{
-	SDL_Rect src = {0, 0, 150, 150};
-	SDL_Rect dest = { m_handler.SCREEN_WIDTH / 8 * m_pos.x,
-					  m_handler.SCREEN_HEIGHT / 8 * m_pos.y,
-					  m_handler.SCREEN_WIDTH / 8,
-					  m_handler.SCREEN_HEIGHT / 8 };
-	m_handler.drawRectangle(src, dest, m_texture);
-}
-
-void Piece::printPieceStr()
-{
-	std::cout << getTeamStr(m_team) << " " << getPieceTypeStr(m_type) << std::endl;
 }
 
 std::string Piece::getTeamStr(Team team) {

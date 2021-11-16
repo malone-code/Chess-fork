@@ -438,10 +438,12 @@ void Game::renderPossibleMoves(Piece* piece)
         {
             SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 164, 211, 238, 255);
         }
-        rectangle = { value.x * mSDLHandler.SCREEN_WIDTH / 8,
-                      value.y * mSDLHandler.SCREEN_HEIGHT / 8,
-                      mSDLHandler.SCREEN_WIDTH / 8,
-                      mSDLHandler.SCREEN_HEIGHT / 8 };
+        SDL_Rect rectangle = {
+			value.x * mSDLHandler.SCREEN_WIDTH / 8,
+			value.y * mSDLHandler.SCREEN_HEIGHT / 8,
+			mSDLHandler.SCREEN_WIDTH / 8,
+			mSDLHandler.SCREEN_HEIGHT / 8
+		};
         SDL_RenderFillRect(mSDLHandler.mRenderer, &rectangle);
 
         for (int i = 0; i < 8; i++)

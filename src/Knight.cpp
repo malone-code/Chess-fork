@@ -10,7 +10,7 @@ Knight::Knight(Team team, const SPosition& pos, SDL_Handler& handler)
 	std::string filename = (team == WHITE) ?
 		Resources::PieceSprites::kWhiteKnight :
 		Resources::PieceSprites::kBlackKnight;
-	m_texture = handler.loadImage(filename);
+	mTexture = handler.loadImage(filename);
 	render();
 }
 
@@ -22,22 +22,22 @@ void Knight::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 	{
 		for (int dy = -1; dy <= 1; dy += 2)
 		{
-			if (m_pos.x + dx >= 0 && m_pos.x + dx <= 7 && m_pos.y + dy >= 0 && m_pos.y + dy <= 7)
+			if (mPosition.x + dx >= 0 && mPosition.x + dx <= 7 && mPosition.y + dy >= 0 && mPosition.y + dy <= 7)
 			{
-				if (field[m_pos.x + dx][m_pos.y + dy] == nullptr)
+				if (field[mPosition.x + dx][mPosition.y + dy] == nullptr)
 				{
 					moves = pushMove(moves,
-									 {m_pos.x + dx, m_pos.y + dy, Piece::NORMAL},
+									 {mPosition.x + dx, mPosition.y + dy, Piece::NORMAL},
 									 getOwnKing(field),
 									 field,
 									 checkCheck);
 				}
-				else if (field[m_pos.x + dx][m_pos.y + dy] != nullptr)
+				else if (field[mPosition.x + dx][mPosition.y + dy] != nullptr)
 				{
-					if (field[m_pos.x + dx][m_pos.y + dy]->getTeam() != m_team)
+					if (field[mPosition.x + dx][mPosition.y + dy]->getTeam() != mTeam)
 					{
 						moves = pushMove(moves,
-										 {m_pos.x + dx, m_pos.y + dy, Piece::NORMAL},
+										 {mPosition.x + dx, mPosition.y + dy, Piece::NORMAL},
 										 getOwnKing(field),
 										 field,
 										 checkCheck);
@@ -51,22 +51,22 @@ void Knight::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 	{
 		for (int dx = -1; dx <= 1; dx += 2)
 		{
-			if (m_pos.x + dx >= 0 && m_pos.x + dx <= 7 && m_pos.y + dy >= 0 && m_pos.y + dy <= 7)
+			if (mPosition.x + dx >= 0 && mPosition.x + dx <= 7 && mPosition.y + dy >= 0 && mPosition.y + dy <= 7)
 			{
-				if (field[m_pos.x + dx][m_pos.y + dy] == nullptr)
+				if (field[mPosition.x + dx][mPosition.y + dy] == nullptr)
 				{
 					moves = pushMove(moves,
-							{m_pos.x + dx, m_pos.y + dy, Piece::NORMAL},
+							{mPosition.x + dx, mPosition.y + dy, Piece::NORMAL},
 							getOwnKing(field),
 							field,
 							checkCheck);
 				}
-				else if (field[m_pos.x + dx][m_pos.y + dy] != nullptr)
+				else if (field[mPosition.x + dx][mPosition.y + dy] != nullptr)
 				{
-					if (field[m_pos.x + dx][m_pos.y + dy]->getTeam() != m_team)
+					if (field[mPosition.x + dx][mPosition.y + dy]->getTeam() != mTeam)
 					{
 						moves = pushMove(moves,
-								{m_pos.x + dx, m_pos.y + dy, Piece::NORMAL},
+								{mPosition.x + dx, mPosition.y + dy, Piece::NORMAL},
 								getOwnKing(field),
 								field,
 								checkCheck);
@@ -76,5 +76,5 @@ void Knight::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 		}
 	}
 
-	m_possibleMoves = moves;
+	mPossibleMoves = moves;
 }

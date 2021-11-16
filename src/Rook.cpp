@@ -10,7 +10,7 @@ Rook::Rook(Team team, const SPosition& pos, SDL_Handler& handler)
 	std::string filename = (team == WHITE) ?
 		Resources::PieceSprites::kWhiteRook :
 		Resources::PieceSprites::kBlackRook;
-	m_texture = handler.loadImage(filename);
+	mTexture = handler.loadImage(filename);
 
 	render();
 }
@@ -29,11 +29,11 @@ void Rook::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 			{
 				dx_copy = dx;
 				dy_copy = dy;
-				while (field[m_pos.x + dx_copy][m_pos.y + dy_copy] == nullptr
-					&& (m_pos.x + dx_copy >= 0 && m_pos.x + dx_copy <= 7 && m_pos.y + dy_copy >= 0 && m_pos.y + dy_copy <= 7))
+				while (field[mPosition.x + dx_copy][mPosition.y + dy_copy] == nullptr
+					&& (mPosition.x + dx_copy >= 0 && mPosition.x + dx_copy <= 7 && mPosition.y + dy_copy >= 0 && mPosition.y + dy_copy <= 7))
 				{
 					moves = pushMove(moves,
-							{m_pos.x + dx_copy, m_pos.y + dy_copy, Piece::NORMAL},
+							{mPosition.x + dx_copy, mPosition.y + dy_copy, Piece::NORMAL},
 							getOwnKing(field),
 							field,
 							checkCheck);
@@ -55,13 +55,13 @@ void Rook::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 						dy_copy += 1;
 					}
 				}
-				if (field[m_pos.x + dx_copy][m_pos.y + dy_copy] != nullptr
-					&& (m_pos.x + dx_copy >= 0 && m_pos.x + dx_copy <= 7 && m_pos.y + dy_copy >= 0 && m_pos.y + dy_copy <= 7))
+				if (field[mPosition.x + dx_copy][mPosition.y + dy_copy] != nullptr
+					&& (mPosition.x + dx_copy >= 0 && mPosition.x + dx_copy <= 7 && mPosition.y + dy_copy >= 0 && mPosition.y + dy_copy <= 7))
 				{
-					if (field[m_pos.x + dx_copy][m_pos.y + dy_copy]->getTeam() != m_team)
+					if (field[mPosition.x + dx_copy][mPosition.y + dy_copy]->getTeam() != mTeam)
 					{
 						moves = pushMove(moves,
-								{m_pos.x + dx_copy, m_pos.y + dy_copy, Piece::NORMAL},
+								{mPosition.x + dx_copy, mPosition.y + dy_copy, Piece::NORMAL},
 								getOwnKing(field),
 								field,
 								checkCheck);
@@ -71,6 +71,6 @@ void Rook::calcPossibleMoves(Piece* field[8][8], bool checkCheck)
 		}
 	}
 
-	m_possibleMoves = moves;
+	mPossibleMoves = moves;
 }
 
