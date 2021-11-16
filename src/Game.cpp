@@ -42,6 +42,14 @@ Game::Game(SDL_Handler& handler)
 	, qb1(new Queen(Piece::BLACK, {4, 7}, handler))
 	, ql1(new Queen(Piece::WHITE, {4, 0}, handler))
 {
+    for (int i = 0; i < 8; ++i)
+    {
+        for (int j = 0; j < 8; ++j)
+        {
+            mField[j][i] = nullptr;
+        }
+    }
+
     mField[0][7] = rb1;
     mField[7][7] = rb2;
     mField[0][0] = rl1;
@@ -81,14 +89,6 @@ Game::Game(SDL_Handler& handler)
     mField[6][6] = pb7;
     mField[7][6] = pb8;
 
-    for (int i = 2; i < 6; ++i)
-    {
-        for (int j = 0; j < 8; ++j)
-        {
-            mField[j][i] = nullptr;
-        }
-    }
-
     calcAllMoves();
 }
 
@@ -96,12 +96,12 @@ Game::~Game()
 {
 }
 
-Piece* Game::getFieldPos(int row, int col)
+Piece* Game::getPieceAtPos(int row, int col)
 {
     return mField[row][col];
 }
 
-void Game::move(Piece* start, std::tuple<int, int, Piece::MoveType> move)
+void Game::move(const Piece& piece, const Piece::SPieceMovement& move)
 {
     if (mCheckEnPassant)
     {
@@ -112,19 +112,19 @@ void Game::move(Piece* start, std::tuple<int, int, Piece::MoveType> move)
         mCheckEnPassant = true;
     }
 
-    switch (std::get<2>(move))
+    switch (move.moveType)
     {
         case Piece::NORMAL:
-            normal(start->getPos().x, start->getPos().y, std::get<0>(move), std::get<1>(move));
+            normal(piece.getPos().x, piece.getPos().y, move.x, move.y);
             break;
         case Piece::CASTLE:
-            castles(start->getPos().x, start->getPos().y, std::get<0>(move), std::get<1>(move));
+            castles(piece.getPos().x, piece.getPos().y, move.x, move.y);
             break;
         case Piece::ENPASSANT:
-            enPassant(start->getPos().x, start->getPos().y, std::get<0>(move), std::get<1>(move));
+            enPassant(piece.getPos().x, piece.getPos().y, move.x, move.y);
             break;
         case Piece::NEWPIECE:
-            exchange(start->getPos().x, start->getPos().y, std::get<0>(move), std::get<1>(move));
+            exchange(piece.getPos().x, piece.getPos().y, move.x, move.y);
             break;
         default:
             break;
@@ -135,7 +135,7 @@ void Game::move(Piece* start, std::tuple<int, int, Piece::MoveType> move)
 
 void Game::normal(int xStart, int yStart, int xEnd, int yEnd)
 {
-    mField[xEnd][yEnd] = getFieldPos(xStart, yStart);
+    mField[xEnd][yEnd] = getPieceAtPos(xStart, yStart);
     mField[xEnd][yEnd]->setHasMoved();
     mField[xStart][yStart] = nullptr;
     mSDLHandler.undoPieceRender(xStart, yStart);
@@ -181,13 +181,13 @@ void Game::normal(int xStart, int yStart, int xEnd, int yEnd)
 
 void Game::enPassant(int xStart, int yStart, int xEnd, int yEnd)
 {
-    Pawn* pawn_start = static_cast<Pawn*>(mField[xStart][yStart]);
-    mField[xEnd][yEnd - pawn_start->m_dy] = nullptr;
-    mField[xEnd][yEnd] = getFieldPos(xStart, yStart);
+    Pawn* pawnStart = static_cast<Pawn*>(mField[xStart][yStart]);
+    mField[xEnd][yEnd - pawnStart->m_dy] = nullptr;
+    mField[xEnd][yEnd] = getPieceAtPos(xStart, yStart);
     mField[xEnd][yEnd]->setHasMoved();
     mField[xStart][yStart] = nullptr;
     mSDLHandler.undoPieceRender(xStart, yStart);
-    mSDLHandler.undoPieceRender(xEnd, yEnd - pawn_start->m_dy);
+    mSDLHandler.undoPieceRender(xEnd, yEnd - pawnStart->m_dy);
     mField[xEnd][yEnd]->setPosition({xEnd, yEnd});
     mField[xEnd][yEnd]->render();
 }
@@ -211,27 +211,29 @@ void Game::exchange(int xStart, int yStart, int xEnd, int yEnd)
         team = Piece::BLACK;
     }
 
+    SDL_Rect rectangle = {
+		0,
+		y_draw,
+		Constants::SCREEN_WIDTH / 4,
+		Constants::SCREEN_HEIGHT / 4
+	};
     SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 155, 103, 60, 255);
-    SDL_Rect rectangle = {0,
-                          y_draw,
-                          Constants::SCREEN_WIDTH / 4,
-                          Constants::SCREEN_HEIGHT / 4 };
     SDL_RenderFillRect(mSDLHandler.mRenderer, &rectangle);
     SDL_Rect src = { 0, 0, Constants::PIECE_SPRITE_WIDTH, Constants::PIECE_SPRITE_HEIGHT };
     mSDLHandler.drawRectangle(src, rectangle, text_rook);
 
-    SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 255, 255, 255, 255);
     rectangle.x = Constants::SCREEN_WIDTH / 4;
+    SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 255, 255, 255, 255);
     SDL_RenderFillRect(mSDLHandler.mRenderer, &rectangle);
     mSDLHandler.drawRectangle(src, rectangle, text_knight);
 
-    SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 155, 103, 60, 255);
     rectangle.x = 2 * Constants::SCREEN_WIDTH / 4;
+    SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 155, 103, 60, 255);
     SDL_RenderFillRect(mSDLHandler.mRenderer, &rectangle);
     mSDLHandler.drawRectangle(src, rectangle, text_bishop);
 
-    SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 255, 255, 255, 255);
     rectangle.x = 3 * Constants::SCREEN_WIDTH / 4;
+    SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 255, 255, 255, 255);
     SDL_RenderFillRect(mSDLHandler.mRenderer, &rectangle);
     mSDLHandler.drawRectangle(src, rectangle, text_queen);
 
@@ -244,6 +246,10 @@ void Game::exchange(int xStart, int yStart, int xEnd, int yEnd)
     while (!done && SDL_WaitEvent(&mSDLHandler.mEvent))
     {
 		if (mSDLHandler.mEvent.type == SDL_QUIT)
+		{
+			done = true;
+		}
+		else if (mSDLHandler.mEvent.type == SDL_MOUSEBUTTONUP && clickedOn != nullptr)
 		{
 			done = true;
 		}
@@ -272,10 +278,6 @@ void Game::exchange(int xStart, int yStart, int xEnd, int yEnd)
 				}
 				std::cout << x << " " << Constants::SCREEN_WIDTH / 640 << std::endl;
 			}
-		}
-		else if (mSDLHandler.mEvent.type == SDL_MOUSEBUTTONUP && clickedOn != nullptr)
-		{
-			done = true;
 		}
     }
 
@@ -459,16 +461,20 @@ void Game::undoRenderPossibleMoves(Piece* piece)
     for (const auto& value : possible) {
         if ((value.x % 2 == 0 && value.y % 2 == 1) || (value.x % 2 == 1 && value.y % 2 == 0))
         {
-            SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 155, 103, 60, 255);
+			const SDL_Color& bg = Constants::BLACK_TILE_BG;
+			SDL_SetRenderDrawColor(mSDLHandler.mRenderer, bg.r, bg.g, bg.b, bg.a);
         }
         else
         {
-            SDL_SetRenderDrawColor(mSDLHandler.mRenderer, 255, 255, 255, 255);
+			const SDL_Color& bg = Constants::WHITE_TILE_BG;
+			SDL_SetRenderDrawColor(mSDLHandler.mRenderer, bg.r, bg.g, bg.b, bg.a);
         }
-        SDL_Rect rectangle = { value.x * Constants::SCREEN_WIDTH / 8,
-                                  value.y * Constants::SCREEN_HEIGHT / 8,
-                                  Constants::SCREEN_WIDTH / 8,
-                                  Constants::SCREEN_HEIGHT / 8 };
+        SDL_Rect rectangle = {
+			Constants::SCREEN_WIDTH * value.x / 8,
+			Constants::SCREEN_HEIGHT * value.y / 8,
+			Constants::SCREEN_WIDTH / 8,
+			Constants::SCREEN_HEIGHT / 8
+		};
         SDL_RenderFillRect(mSDLHandler.mRenderer, &rectangle);
 
         for (int i = 0; i < 8; i++)
@@ -490,7 +496,7 @@ void Game::calcAllMoves()
     {
         for (int j = 0; j < 8; j++)
         {
-            if (mField[i][j] != nullptr)
+            if (mField[i][j])
             {
                 mField[i][j]->calcPossibleMoves(mField, true);
             }

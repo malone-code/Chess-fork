@@ -18,10 +18,10 @@ public:
     ~Game();
 
 	// returns a the Piece in field (row, col)
-	Piece* getFieldPos(int row, int col);
+	Piece* getPieceAtPos(int row, int col);
 
     //Moves a piece
-    void move(Piece* piece, std::tuple<int, int, Piece::MoveType> move);
+    void move(const Piece& piece, const Piece::SPieceMovement& move);
 
     // returns m_turn
     Piece::Team getTurn() { return mTurn; };

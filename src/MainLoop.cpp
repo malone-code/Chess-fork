@@ -1,10 +1,11 @@
 #include "MainLoop.h"
 
 #include "Game.h"
-#include "SDL_events.h"
 #include "SDL_Handler.h"
 
+#include <SDL_events.h>
 #include <SDL.h>
+
 #include <stdio.h>
 
 void MainLoop::run()
@@ -32,8 +33,8 @@ void MainLoop::run()
 		{
 			xStart = handler.mEvent.button.x / 80;
 			yStart = handler.mEvent.button.y / 80;
-			clickedOn = game.getFieldPos(xStart, yStart);
-			if (clickedOn != nullptr)
+			clickedOn = game.getPieceAtPos(xStart, yStart);
+			if (clickedOn)
 			{
 				if (clickedOn->getTeam() == game.getTurn())
 				{
@@ -43,7 +44,7 @@ void MainLoop::run()
 		}
 		else if (handler.mEvent.type == SDL_MOUSEBUTTONUP)
 		{
-			if (clickedOn != nullptr)
+			if (clickedOn)
 			{
 				if (clickedOn->getTeam() == game.getTurn())
 				{
@@ -52,18 +53,18 @@ void MainLoop::run()
 			}
 			xEnd = handler.mEvent.button.x / 80;
 			yEnd = handler.mEvent.button.y / 80;
-			if (clickedOn != nullptr)
+			if (clickedOn)
 			{
 				if ((xStart != -1 && yStart != -1 && xEnd != -1 && yEnd != -1)
 					&& (clickedOn->getTeam() == game.getTurn())
 					&& (game.isValidMove(xEnd, yEnd, clickedOn)))
 				{
-					std::vector<Piece::SPieceMovement> list = game.getFieldPos(xStart, yStart)->getPossibleMoves();
+					std::vector<Piece::SPieceMovement> list = game.getPieceAtPos(xStart, yStart)->getPossibleMoves();
 					for (const auto& value : list)
 					{
 						if (value.x == xEnd && value.y == yEnd)
 						{
-							game.move(clickedOn, std::tuple<int, int, Piece::MoveType>(xEnd, yEnd, value.moveType));
+							game.move(*clickedOn, {xEnd, yEnd, value.moveType});
 							clickedOn->printPieceStr();
 						}
 					}
@@ -77,3 +78,4 @@ void MainLoop::run()
 		}
 	}
 }
+
