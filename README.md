@@ -2,10 +2,6 @@
 
 <p align="center">Description<project-description></p>
 
-## Links
-
-- [Repo](https://github.com/JuUnland/Chess "<project-name> Repo")
-
 ## Screenshots
 
 ![Home Page](https://user-images.githubusercontent.com/73100154/137021864-877f6349-ab5d-494f-978a-ead9db467dcc.png "Home Page")
@@ -13,7 +9,7 @@
 ## Built With
 
 - C++
-- Visual Studio 2019
+- cmake
 - SDL2
 - SDL2_Image
 
@@ -30,17 +26,3 @@
 - x64, c++ 17 (others should work too)
 - SDL2
 - SDL2_image
-
-## Future Updates
-
-- kp digga
-
-## Author
-
-**Julian Unland**
-
-## 🤝 Support
-
-Contributions, issues, and feature requests are welcome!
-
-Give a ⭐️ if you like this project!
