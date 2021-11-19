@@ -1,4 +1,4 @@
-<h1 align="center">Chess<project-name></h1>
+<h1 align="center">Chess Fork<project-name></h1>
 
 <p align="center">Description<project-description></p>
 
